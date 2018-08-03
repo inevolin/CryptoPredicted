@@ -300,3 +300,28 @@ Note: regular Gmail accounts have a daily smtp sending limit. It's more recommen
 If you use Google's service make sure to enable less secure apps - https://www.google.com/settings/security/lesssecureapps but also disable Captcha temporarily so you can connect - https://accounts.google.com/b/0/displayunlockcaptcha .
 
 
+## Database migration
+If you ever need to migrate the database from one server to another, you will need do this quickly and efficiently.
+
+1. Shut down all producers, consumers and node workers (on all servers). Otherwise we may end up with duplicate key exceptions during import phase.
+2. run on "source" database:
+```
+mongodump --username "root" --password "....." --authenticationDatabase "admin" --out mongodumpOut --db=crypto
+```
+3. copy the mongodumpOut directory from "source" server to destination "server". You can use scp for this:
+```
+scp -r mongodumpOut root@159.69.94.65:/home/cryptopredicted/
+```
+4. Enter mongo shell as root user on "destination" server and run:
+```
+use crypto
+db.dropDatabase()
+```
+this will remove the entire crypto database, so whenever we import data (next), we don't have to deal with duplicate key exceptions.
+5. On destination server run (make sure mongodumpOut dir is within scope):
+```
+mongorestore --username "root" --password "......" --authenticationDatabase "admin" mongodumpOut/
+```
+6. Restart all producers, consumers and node workers.
+
+Note: depending on how quick you execute this process, you might experience data loss. So try to execute everything as quickly as possible to minimize its effects. It's also not clearly documented how mongorestore handles duplicate key exceptions, it "may" not even be necessary to shut down all modules prior to migrating the data.
