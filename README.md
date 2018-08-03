@@ -318,6 +318,7 @@ use crypto
 db.dropDatabase()
 ```
 this will remove the entire crypto database, so whenever we import data (next), we don't have to deal with duplicate key exceptions.
+
 5. On destination server run (make sure mongodumpOut dir is within scope):
 ```
 mongorestore --username "root" --password "......" --authenticationDatabase "admin" mongodumpOut/
