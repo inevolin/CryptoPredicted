@@ -210,12 +210,12 @@ def process_rdd_sentimentAnalysis_social(time, part_iterator):
                     buckets[keeper['crypto']] = []
                 buckets[keeper['crypto']].append( keeper )
 
-            # for key, val in buckets.items():
-            #     log(key + " keepers: " + str(len(val)))
-            #     val = sorted(val, key=lambda k: k['social_score'], reverse=True)    
-            #     val = val[:MAX_MENTIONS_EXTENDED_PER_WINDOW] if len(val) > MAX_MENTIONS_EXTENDED_PER_WINDOW else val
-            #     log(key + " keepers: " + str(len(val)))
-            #     log("--")
+            for key, val in buckets.items():
+                log(key + " keepers: " + str(len(val)))
+                val = sorted(val, key=lambda k: k['social_score'], reverse=True)    
+                val = val[:MAX_MENTIONS_EXTENDED_PER_WINDOW] if len(val) > MAX_MENTIONS_EXTENDED_PER_WINDOW else val
+                log(key + " keepers: " + str(len(val)))
+                log("--")
             #     DAL.store_mentions_social_extended_bulk(client, val, datetime.fromtimestamp(time));
                 
         if len(crypto_sentiments) > 0:
@@ -301,8 +301,8 @@ def process_rdd_sentimentAnalysis_news(time, part_iterator):
                 log("exception")
                 logErr(str(ex), traceback.format_exc())
                     
-        # if len(keepers) > 0:
-        #     DAL.store_mentions_news_extended_bulk(client, keepers, datetime.fromtimestamp(time));
+        if len(keepers) > 0:
+            DAL.store_mentions_news_extended_bulk(client, keepers, datetime.fromtimestamp(time));
             
         if len(crypto_sentiments) > 0:
             for crypto, sentiments in crypto_sentiments.items():

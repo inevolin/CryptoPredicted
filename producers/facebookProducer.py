@@ -28,7 +28,7 @@ log = createLogger("facebookProducer_info", "facebookProducer_info")
 
 
 post_arr = []
-graph = GraphAPI("109177....24114|FTDEjpb8......wnQvZG38")
+graph = GraphAPI("637282779976098|Njeav9jewlL9uH-xTWFeodHNAak")
 appendix = '/feed/?fields=message,link,created_time,name' # we don't need comments/likes/reactions, because these change over time -- we only care when something is posted
 appendix += '&limit=25'
 for page in CRYPTO_facebookPages:
@@ -45,6 +45,7 @@ def process():
 			ret = graph.batch(post_arr)
 			for entries in ret:
 				try:
+					log.info(entries)
 					for obj in entries['data']:
 						body = ''
 						link = obj['link'] if 'link' in obj else ''
