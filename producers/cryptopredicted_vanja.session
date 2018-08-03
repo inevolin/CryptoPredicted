@@ -1,0 +1,25 @@
+{
+    "auth_key": [
+        "QNVPg2QeE/IojDfDJHadK9KD01OVKVNVRM7qnkyUg07",
+        "GSGB4LiFp0bKwd7USfDb6B3y2CEOztC387pblOfyPEt",
+        "7biMv7dBUA4g2Qvp5RsGnF0yg5oUENKE9T4XLRU6nfL",
+        "oxZbYUG3oyU5SPED0DjAmVgnSonqoYNxQJkoJPcRdUY",
+        "NbdMD3cEiZF8wsvv3EGLdnHZuh4qopx09sf3tJEC9uG",
+        "wiuYc+dEcyvpI/2wDo4epbJVs57qk7RKpycXXOn9swJ",
+        "XaUhQ9eRKgKdm85LGxlwbMAk9SV9Zq1f4jHC9gCrmKO",
+        "4yRqrYB5EuJNojp94m4T7KKF4Wim/TDGBHjZjp8ug=="
+    ],
+    "test_mode": false,
+    "user_id": 595506204,
+    "peers_by_username": {},
+    "peers_by_phone": {
+        "38668670446": 595506204,
+        "42777": 777000
+    },
+    "dc_id": 4,
+    "date": 1533314774,
+    "peers_by_id": {
+        "777000": -321691933809390344,
+        "595506204": 5695491427574201236
+    }
+}
