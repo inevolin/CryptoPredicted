@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <style>
+    @media (min-width: 768px) {
+      .form {
+        padding: 0 108px;
+      }
+    }
+    @media (max-width: 768px) {
+      .form {
+        padding: 0 25px;
+      }
+    }
+  </style>
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Signal notifications</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+        <div class="sub-container">
+            
+            <div class="subscription-block" style="min-height: auto; margin-bottom: 30px; padding-top: 30px;">
+              <div class="row" style="margin:0px 0px 20px 0px; text-align: left;">
+                <div class="col-lg-12">
+
+                  <p style="font-size: 1.3rem; margin-bottom: 10px;">
+                    <strong>Telegram bot</strong>
+                  </p>
+
+                  <p style="font-size: 16px; margin-bottom: 40px;">
+                    Use this guide to start receiving our trade signals directly on your Telegram app.
+                  </p>
+
+                  <p style="font-size: 16px; margin-top:40px;">
+                    <strong style="font-size: 20px;">Step 1</strong><br>
+                    Download and install <a href="https://telegram.org/" target="_blank"><u>Telegram</u></a> on your device(s).
+                  </p>
+                  <p style="font-size: 16px; margin-top:40px;">
+                    <strong style="font-size: 20px;">Step 2</strong><br>
+                    Add "@cryptopredicted_bot" or simply click <a href="https://t.me/cryptopredicted_bot" target="_blank"><u>here</u></a>.
+                    <br><br>
+                    <img src="/images/telegram_notifs/tgbot_2.png" style="max-width: 100%">
+                  </p>
+
+                  <p style="font-size: 16px; margin-top:40px;">
+                    <strong style="font-size: 20px;">Step 3</strong><br>
+                    Send the command below to our bot. You only have to do this on one device.
+                  </p>
+
+                  
+                  <div class="form" style="margin:20px auto; max-width: 100%;">
+                    <div class="form-group input-focused" style="padding: 16px 0px 0px 0px;">
+                      <label for="coupon" style="left: 0;">Telegram command:</label>
+                      <input style=" text-align: center; border: 1px solid #5866de;" class="form-control" type="text" id="telegram_command" value="<%= telegram_command %>" >
+                      <a href="#" style="margin-right: 9px;padding: 4px;" onclick="copy_telegram_command();return false;" class="help">COPY</a>
+                    </div>
+                  </div>
+
+                  <p style="font-size: 16px; margin-top:40px;">
+                    <img src="/images/telegram_notifs/tgbot_3.png" style="max-width: 100%">
+                  </p>
+
+
+                  <p style="font-size: 16px; margin-top:40px;" id="test_paragraph">
+                    <strong style="font-size: 20px;">Testing</strong><br>
+                     If you successfully  completed all 3 steps, <a href="#" onclick="test_telegram();return false;"><u>click here</u></a> to test it out. You should immeditaly receive a message from our bot.
+                    <br><br>
+                    <img src="/images/telegram_notifs/tgbot_5.png" style="max-width: 100%">
+                  </p>
+
+                  <p style="font-size: 16px; margin-top:40px;">
+                    <strong style="font-size: 20px;">You're good to go!</strong><br>
+                     Make sure you have enabled telegram notifications for your preferred strategies (on the trade signals page).
+                    <br><br>
+                    <img src="/images/telegram_notifs/tgbot_4.png" style="max-width: 100%">
+                  </p>
+
+                  <p style="font-size: 16px; margin-top:40px;">
+                    <strong style="font-size: 20px;">Demo:</strong>
+                    <br><br>
+                    <img src="/images/telegram_notifs/tgbot_1.png" style="max-width: 100%">
+                  </p>
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+
+<script>
+    function copy_telegram_command() {
+      copyToClipboard($('#telegram_command').val())
+      $("#telegram_command").animate({opacity:0},200,"linear",function(){
+        $(this).animate({opacity:1},200);
+      });
+    }
+    const copyToClipboard = (str) => {
+      const el = document.createElement('textarea');
+      el.value = str;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    };
+
+    function test_telegram() {
+      $.ajax({
+          type: 'POST',
+          contentType: 'application/json',
+          url: 'test/telegram/setup/',
+          success: function(data) {
+            $("#test_paragraph").animate({opacity:0},200,"linear",function(){
+              $(this).animate({opacity:1},200);
+            });
+          }
+      });
+    }
+    
+
+</script>
+
+
+
+</body>
+</html>

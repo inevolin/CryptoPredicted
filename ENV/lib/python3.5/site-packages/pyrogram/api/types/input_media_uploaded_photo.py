@@ -1,0 +1,69 @@
+# Pyrogram - Telegram MTProto API Client Library for Python
+# Copyright (C) 2017-2018 Dan Tès <https://github.com/delivrance>
+#
+# This file is part of Pyrogram.
+#
+# Pyrogram is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Pyrogram is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
+
+from io import BytesIO
+
+from pyrogram.api.core import *
+
+
+class InputMediaUploadedPhoto(Object):
+    """Attributes:
+        ID: ``0x1e287d04``
+
+    Args:
+        file: Either :obj:`InputFile <pyrogram.api.types.InputFile>` or :obj:`InputFileBig <pyrogram.api.types.InputFileBig>`
+        stickers (optional): List of either :obj:`InputDocumentEmpty <pyrogram.api.types.InputDocumentEmpty>` or :obj:`InputDocument <pyrogram.api.types.InputDocument>`
+        ttl_seconds (optional): ``int`` ``32-bit``
+    """
+
+    ID = 0x1e287d04
+
+    def __init__(self, file, stickers: list = None, ttl_seconds: int = None):
+        self.file = file  # InputFile
+        self.stickers = stickers  # flags.0?Vector<InputDocument>
+        self.ttl_seconds = ttl_seconds  # flags.1?int
+
+    @staticmethod
+    def read(b: BytesIO, *args) -> "InputMediaUploadedPhoto":
+        flags = Int.read(b)
+        
+        file = Object.read(b)
+        
+        stickers = Object.read(b) if flags & (1 << 0) else []
+        
+        ttl_seconds = Int.read(b) if flags & (1 << 1) else None
+        return InputMediaUploadedPhoto(file, stickers, ttl_seconds)
+
+    def write(self) -> bytes:
+        b = BytesIO()
+        b.write(Int(self.ID, False))
+
+        flags = 0
+        flags |= (1 << 0) if self.stickers is not None else 0
+        flags |= (1 << 1) if self.ttl_seconds is not None else 0
+        b.write(Int(flags))
+        
+        b.write(self.file.write())
+        
+        if self.stickers is not None:
+            b.write(Vector(self.stickers))
+        
+        if self.ttl_seconds is not None:
+            b.write(Int(self.ttl_seconds))
+        
+        return b.getvalue()

@@ -1,0 +1,68 @@
+
+<!-- set the encoding of your site -->
+<meta charset="utf-8">
+<!-- set the encoding of your site -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="manifest" href="manifest.json">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112991572-2"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-112991572-2');
+</script>
+
+<script>
+	if ('serviceWorker' in navigator) {
+	  navigator.serviceWorker.register('/sw.js');
+	}
+</script>
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/resources/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon-16x16.png">
+<link rel="mask-icon" href="/resources/safari-pinned-tab.svg" color="#111da5">
+<link rel="shortcut icon" href="/resources/favicon.ico">
+<meta name="msapplication-TileColor" content="#111da5">
+<meta name="msapplication-config" content="/resources/browserconfig.xml">
+<meta name="theme-color" content="#111da5">
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-1242@3x~iphone6s-landscape_2208x1242.png" sizes="2208x1242" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Landscape@2x~ipad_2048x1536.png" sizes="2048x1536" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Landscape@2x~ipad_2048x1496.png" sizes="2048x1496" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Portrait@2x~ipad_1536x2048.png" sizes="1536x2048" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Portrait@2x~ipad_1536x2008.png" sizes="1536x2008" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage~ipad.png" sizes="1536x2008" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-750@2x~iphone6-landscape_1334x750.png" sizes="1334x750" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-1242@3x~iphone6s-portrait_1242x2208.png" sizes="1242x2208" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Landscape~ipad_1024x768.png" sizes="1024x768" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Landscape~ipad_1024x748.png" sizes="1024x748" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-Portrait~ipad_768x1024.png" sizes="768x1024" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage.png" sizes="768x1004" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-750@2x~iphone6-portrait_750x1334.png" sizes="750x1334" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage-568h@2x~iphone_640x1136.png" sizes="640x1136" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage~iphone_640x960.png" sizes="640x960" rel="apple-touch-startup-image" />
+<link href="/manifest/iOS/LaunchImage.launchimage/LaunchImage~iphone-320x480.png" sizes="320x480" rel="apple-touch-startup-image" />
+
+<script>
+	// Detects if device is on iOS 
+	const isIos = () => {
+	  const userAgent = window.navigator.userAgent.toLowerCase();
+	  return /iphone|ipad|ipod/.test( userAgent );
+	}
+	// Detects if device is in standalone mode
+	const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+	// Checks if should display install popup notification:
+	if (isIos() && !isInStandaloneMode()) {
+	  this.setState({ showInstallMessage: true });
+	}
+</script>

@@ -1,0 +1,1 @@
+source /home/cryptopredicted/ENV/bin/activate

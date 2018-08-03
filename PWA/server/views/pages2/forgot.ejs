@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Password reset</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+
+      <!-- login block -->
+      <section class="forget-block">
+        <div class="container">
+
+          <div class="sub-container">
+            
+            <div class="text">
+              <p style="opacity: .8;">Enter your email address below and<br> we'll get you back on track.</p>
+            </div>
+            <form class="form" method="POST" action="forgot">
+              <div class="form-group email input-focused">
+                <label for="rel01">Email</label>
+                <input class="form-control" type="email" name="email" id="rel01" required="required" <% if (typeof email !== 'undefined') { %> value="<%= email %>" <% } %> >
+              </div>
+
+              <div class="form-group">
+                <span style="color: white; font-weight: 1000;"> <% if (typeof err !== 'undefined') { %> <%= "Error: " + err %> <% } %> </span>
+                <span style="color: white; font-weight: 1000;"> <% if (typeof suc !== 'undefined') { %> <%= suc %> <% } %> </span>
+              </div>
+
+              <div class="btn-holder" style="background:none; padding:20px 0px 0px 0px;">
+                <div class="container">
+                  <button type="submit" class="btn-next bg" style="color: white; cursor: pointer;"></button>
+                </div>
+              </div>
+
+              <div class="form-group" style="text-align: center; margin-top:30px;">
+                <span ><a style="color: white; " href="login"> Back to login? </a></span>
+              </div>
+
+            </div>
+            
+          </div>
+
+        </div>
+
+      </section>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>

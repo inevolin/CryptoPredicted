@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+
+  
+
+  <script>
+    <%- include('/home/cryptopredicted/PWA/server/views/public2/js/socket.io.js') %>
+  </script>
+  <script>
+    <%- include('/home/cryptopredicted/PWA/server/views/public2/js/moment.js') %>
+  </script>
+  <script>
+    <%- include('/home/cryptopredicted/PWA/server/views/public2/js/plotly-latest.min.js') %>
+  </script>
+  
+
+
+</head>
+<body class="inner2 filters-active">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title"><em><%= base_cur %>/<%= quote_cur %></em> <span class="d-md-inline">Predictions</span></strong>
+          <a href="#" id="toggle_filter"  class="filter-link">
+            <span class="txt">filter</span>
+            <span class="icon-cancel"></span>
+          </a>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <!-- filter block -->
+      <div class="filters-block">
+        <div class="container">
+          <!-- form box -->
+          <div class="form-box">
+            <div class="field">
+              <span class="form-select">
+                <select id="exchange">
+                  <!-- <option value="bittrex" selected="selected">Bittrex</option> -->
+                  <option value="binance">Binance</option>
+                  <!-- <option value="coinbase">Coinbase</option> -->
+                </select>
+              </span>
+            </div>
+            <div class="field">
+              <span class="form-select">
+                <select id="interval">
+                  <option value=10 selected="selected">Price intervals: 10 minutes</option>
+                  <option value=60>Price intervals: 1 hour</option>
+                </select>
+              </span>
+            </div>
+            <!-- <button class="btn-done" type="submit">done</button> -->
+          </div>
+        </div>
+      </div>
+      <!-- tabs bar -->
+      <div class="tabs-bar">
+        <div class="container">
+          <!-- tabs list -->
+          <ul class="tabs-list add">
+            <li id="show_line_chart" class="active"><a href="#"><span>Line Chart</span></a></li>
+            <li id="show_candle_chart"><a href="#"><span>Candle Chart</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container">
+        <div class="sub-container">
+
+          <!-- chart-box -->
+          <div class="chart-box">
+            <div class="head">
+              <strong class="title" id="chartBoxTitle" style="color:green;">  </strong>
+              <div class="box">
+                <span class="rate" id="priceLowest"></span>
+                <span class="txt">Lowest</span>
+              </div>
+              <div class="box">
+                <span class="rate" id="priceCurrent"></span>
+                <span class="txt">Current</span>
+              </div>
+              <div class="box">
+                <span class="rate" id="priceHighest"></span>
+                <span class="txt">Highest</span>
+              </div>
+            </div>
+            <div class="chart">
+              <div id="chart_predic"></div>
+              <div id="chart_predic_ohlc"></div>
+              <div style="margin-top:20px;">
+                <!-- <button style="background: none; border: 1px solid #111da5; border-radius: 4px; cursor: pointer; margin-left:10px; padding:5px 15px; color:#111da5;" onclick="consultPrev()">&lt; prev</button>
+                <button style="background: none; border: 1px solid #111da5; border-radius: 4px; cursor: pointer; margin-left:1px; padding:5px 15px; color:#111da5;" onclick="consultNext()">next &gt;</button> -->
+                <!-- <button style="background: none; border: 1px solid #111da5; border-radius: 4px; cursor: pointer; margin-left:10px; padding:5px 15px; " id="btnRealTime" onclick="consultRealTime()">live</button> -->
+              </div>
+            </div>
+          </div>
+
+          <h4 style="text-align: center;margin: 100px auto;">Join us on <a style="color:#1111da;" href="https://t.me/crypto_predicted" target="_blank">telegram</a>.</h4>
+
+          
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_blue') %>
+  </div>
+
+
+ <script>
+  
+  $('#toggle_filter, .btn-done').on('click', function() {
+    if ($('body').hasClass('filters-active')) {
+      $('body').removeClass('filters-active');  
+    }
+    else {
+      $('body').addClass('filters-active');
+    }
+    return false;
+  });
+
+  $('#exchange').change(function() {
+    allowedStorage(function() {
+      localStorage.setItem("exchange", $('#exchange').val() );
+      trace_predic = null;
+      trace_predic_ohlc = null;
+    });
+  });
+  $('#interval').change(function() {
+    allowedStorage(function() {
+      localStorage.setItem("interval", $('#interval').val() );
+      trace_predic = null;
+      trace_predic_ohlc = null;
+    });
+  });
+
+  $('#show_line_chart').on('click', function() {
+    $('#chart_predic_ohlc').hide();
+    $('#chart_predic').show();
+    redrawCharts();
+    $('#show_line_chart').removeClass('active');
+    $('#show_candle_chart').removeClass('active');
+    $('#show_line_chart').addClass('active');
+    return false;
+  });
+  $('#chart_predic_ohlc').hide(); // default state
+  $('#show_candle_chart').on('click', function() {
+    $('#chart_predic').hide();
+    $('#chart_predic_ohlc').show();
+    redrawCharts();
+    $('#show_candle_chart').removeClass('active');
+    $('#show_line_chart').removeClass('active');
+    $('#show_candle_chart').addClass('active');
+    return false;
+  });
+
+  allowedStorage(function() {
+    var exchange= localStorage.getItem("exchange");
+    $('#exchange option[value="'+exchange+'"]').prop("selected", true);
+  });
+  allowedStorage(function() {
+    var interval= localStorage.getItem("interval");
+    $('#interval option[value="'+interval+'"]').prop("selected", true);
+  });
+  
+
+  function allowedStorage(next) {
+    if (typeof(Storage) !== "undefined") {
+        next()
+    } 
+  }
+</script>
+<script>
+  var real_time = true;
+  $('#chartBoxTitle').html('live &#10003;');
+  $('#btnRealTime').html('live &#10003;');
+  $('#btnRealTime').attr('disabled', 'disabled');
+  var datetime_interval_end = null;
+
+  var secondsSinceLastUpdate = 0;
+  var timerRealTime = initRealTimeTimer();
+
+  function initRealTimeTimer() {
+      return setInterval(function() {
+          timerRealTimeFunc();
+      }, 1000);
+  }
+
+  function timerRealTimeFunc() {
+      secondsSinceLastUpdate++;
+      $('.status').text("Last update: " + secondsSinceLastUpdate + " seconds ago.");
+  }
+
+  function getCookie(name) {
+      var re = new RegExp(name + "=([^;]+)");
+      var value = re.exec(document.cookie);
+      return (value != null) ? unescape(value[1]) : null;
+  }
+
+  var WIDTH_IN_PERCENT_OF_PARENT = 100,
+      HEIGHT_IN_PERCENT_OF_PARENT = 350;
+  $('#chart_predic').css({
+      width: WIDTH_IN_PERCENT_OF_PARENT + '%',
+      'min-height': HEIGHT_IN_PERCENT_OF_PARENT + 'px',
+  });
+  $('#chart_predic_ohlc').css({
+      width: WIDTH_IN_PERCENT_OF_PARENT + '%',
+      'min-height': HEIGHT_IN_PERCENT_OF_PARENT + 'px',
+  });
+
+  $('#exchange, #interval').on('change', function() {
+      if (socket != null) {
+          socket.disconnect();
+      }
+
+      init_predictionData();
+      consultRealTime();
+  });
+
+  var roundDateToInterval = function(timestamp, interval) {
+      var dt = timestamp.getTime() - (new Date(0)).getTime();
+      var mod = dt % (1000 * 60 * interval);
+      var sub = dt - mod;
+      var add = sub + (new Date(0)).getTime();
+      return new Date(add);
+  }
+
+  function consultOther(_datetime) {
+      if (_datetime > new Date()) {
+          _datetime = new Date()
+      }
+      clearInterval(timerRealTime)
+      var roomObj = {
+          'base_cur': '<%= base_cur %>',
+          'quote_cur': '<%= quote_cur %>',
+          'exchange': $('#exchange').find(':selected').val(),
+          'interval': parseInt($('#interval').find(':selected').val()),
+          'sessionID': getCookie('sessionID'),
+          'datetime': _datetime,
+          'mode': 'production',
+      };
+      // console.log(roomObj)
+      socket.emit('consult', roomObj);
+  }
+
+  function consultPrev() {
+      real_time = false
+      $('#chartBoxTitle').text('');
+      $('#btnRealTime').html('live');
+      $('#btnRealTime').removeAttr('disabled');
+      var interval = parseInt($('#interval').find(':selected').val())
+
+      var _datetime = datetime_interval_end
+      if (_datetime == null) {
+          _datetime = new Date()
+          _datetime = roundDateToInterval(_datetime, interval)
+          _datetime = new Date(_datetime.getTime() - 1)
+      } else {
+          _datetime = new Date(_datetime.getTime() - 1000 * 60 * interval)
+      }
+      datetime_interval_end = _datetime
+      consultOther(_datetime)
+  }
+
+  function consultNow() {
+      //real_time = false
+      $('#chartBoxTitle').html('live &#10003;');
+      $('#btnRealTime').html('live &#10003;');
+      $('#btnRealTime').attr('disabled', 'disabled');
+      var interval = parseInt($('#interval').find(':selected').val())
+
+      var _datetime = new Date()
+      _datetime = roundDateToInterval(_datetime, interval)
+      _datetime = new Date(_datetime.getTime() - 1 + 1000 * 60 * interval)
+      datetime_interval_end = _datetime
+      consultOther(_datetime)
+  }
+
+  function consultNext() {
+    if (real_time) return; // if we are already at "max timestamp"
+
+      real_time = false
+      $('#chartBoxTitle').text('');
+      $('#btnRealTime').html('live');
+      $('#btnRealTime').removeAttr('disabled');
+      var interval = parseInt($('#interval').find(':selected').val())
+
+      var _datetime = datetime_interval_end
+      if (_datetime == null) {
+          _datetime = new Date()
+          _datetime = roundDateToInterval(_datetime, interval)
+          _datetime = new Date(_datetime.getTime() - 1 + 1000 * 60 * interval)
+      } else if (_datetime < new Date()) {
+          _datetime = new Date(_datetime.getTime() + 1000 * 60 * interval)
+      } else if (_datetime >= new Date()) {
+          return consultRealTime();
+      }
+      datetime_interval_end = _datetime
+      consultOther(_datetime)
+  }
+
+  function consultRealTime() {
+      consultNow()
+      timerRealTime = initRealTimeTimer();
+      real_time = true;
+      datetime_interval_end = null;
+      //init_predictionData()
+  }
+
+  var getUrlParameter = function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+          sURLVariables = sPageURL.split('&'),
+          sParameterName,
+          i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+
+          if (sParameterName[0] === sParam) {
+              return sParameterName[1] === undefined ? true : sParameterName[1];
+          }
+      }
+  }
+
+  var DATA_prediction = null;
+  var socket = null;
+
+  function init_predictionData() {
+      var roomObj = {
+          'base_cur': '<%= base_cur %>',
+          'quote_cur': '<%= quote_cur %>',
+          'exchange': $('#exchange').find(':selected').val(),
+          'interval': parseInt($('#interval').find(':selected').val()),
+          'sessionID': getCookie('sessionID'),
+          'mode': 'production',
+      };
+      //var socket = io.connect('https://cryptopredicted.com:8443/');
+      socket = io.connect('/predictions', {
+          'path': '<%= root_node %>socket.io/',
+      });
+
+      socket.on('connect', function(data) {
+          //console.log("joining: ");
+          //console.log(roomObj);
+          socket.emit('join', roomObj);
+      });
+      socket.on('data', function(data) {
+          if (real_time) {
+              console.log('server data received');
+              DATA_prediction = data;
+              if (data) {
+                  //console.log(data);
+                  $('.forecastCur').text("(" + data.base_cur + "-" + data.quote_cur + ")")
+                  createChart_prediction(data);
+                  createChart_prediction_ohlc(data);
+                  secondsSinceLastUpdate = 0;
+              }
+          }
+      });
+      socket.on('consult', function(data) {
+          //if (!real_time) {
+              console.log('server consult-data received');
+              DATA_prediction = data;
+              if (data) {
+                  //console.log(data);
+                  $('.forecastCur').text("(" + data.base_cur + "-" + data.quote_cur + ")")
+                  createChart_prediction(data);
+                  createChart_prediction_ohlc(data);
+                  secondsSinceLastUpdate = 0;
+              }
+          //}
+      });
+      socket.on('message', function(msg) {
+          console.log('server message:' + msg);
+          alert(msg)
+      });
+  }
+  if (real_time) {
+      init_predictionData()
+  }
+
+  function adjustPriceLabels(arr) {
+    //console.log(arr);
+    var min=null,max=null;
+    var i = 0;
+    for (i = 0; i < arr.length; i++) {
+      if (min==null||arr[i] < min) {
+        min = arr[i]
+      }
+      if (max==null||arr[i] > max) {
+        max = arr[i]
+      }
+    }
+    $('#priceLowest').html('$'+min.toFixed(4));
+    $('#priceCurrent').html('$'+arr[i-1].toFixed(4));
+    $('#priceHighest').html('$'+max.toFixed(4));
+  }
+
+  window.onresize = function() {
+      redrawCharts();
+  };
+  function redrawCharts() {
+    if (DATA_prediction == null) return;
+    createChart_prediction(DATA_prediction);
+    createChart_prediction_ohlc(DATA_prediction);
+  }
+
+  var ann_template = {
+      x: null,
+      y: null,
+      xref: 'x',
+      yref: 'paper',
+      text: 'buy',
+      font: {
+          color: 'magenta'
+      },
+      showarrow: true,
+
+      arrowwidth: 2,
+      ax: 0,
+      ay: 30
+  };
+
+  function addAnnon(ann_template, text, dt, yStart, color) {
+      var ann = Object.assign({}, ann_template);
+      ann.text = text;
+      ann.x = dt;
+      ann.y = yStart;
+      ann.font = {
+          color: '' + color
+      };
+      return ann
+  }
+
+  function createChart_prediction(data) {
+      var layout = {
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+
+          showlegend: false,
+
+          margin: {
+              l: 0,
+              r: 0,
+              b: 15,
+              t: 15,
+              pad: 0
+          },
+          xaxis: {
+              type: 'date',
+              fixedrange: true,
+              //tickformat: '%H:%M',
+
+          },
+          yaxis: {
+              //title: 'Price',
+              showgrid: true,
+              fixedrange: true,
+              side: 'left',
+          },
+
+          annotations: [],
+      };
+
+      var settings = {
+          scrollZoom: false,
+          displayModeBar: false,
+          staticPlot: true,
+      };
+
+      var traces = [];
+      traces = traces.concat(draw_predictionsChart_mobile(data));
+
+      var interval = parseInt($('#interval').find(':selected').val())
+
+      layout.annotations.push(
+          addAnnon(ann_template, "", moment(datetime_interval_end == null ? roundDateToInterval(new Date(), interval) : roundDateToInterval(datetime_interval_end, interval)).format('YYYY-MM-DDTHH:mm'), 0.1, 'red')
+      )
+      for (var i=0; i< traces.length; i++) {
+        if (traces[i].name == 'Price avg') {
+          adjustPriceLabels(traces[i].y);
+        }
+      }
+
+      Plotly.newPlot('chart_predic', traces, layout, settings);
+      additionalTransformations('#chart_predic')
+  }
+
+  function createChart_prediction_ohlc(data) {
+      var layout = {
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+
+          showlegend: false,
+
+          margin: {
+              l: 0,
+              r: 0,
+              b: 15,
+              t: 15,
+              pad: 0
+          },
+          xaxis: {
+              type: 'date',
+              fixedrange: true,
+              //tickformat: '%H:%M',
+              rangeslider: {
+                  visible: false
+              },
+
+          },
+          yaxis: {
+              //title: 'Price',
+              showgrid: true,
+              fixedrange: true,
+              side: 'left',
+          },
+
+          annotations: [],
+      };
+
+      var settings = {
+          scrollZoom: false,
+          displayModeBar: false,
+          staticPlot: true,
+      };
+
+      var traces = [];
+      traces = traces.concat(draw_predictionsChart_mobile_ohlc(data));
+
+      var interval = parseInt($('#interval').find(':selected').val())      
+      layout.annotations.push(
+          addAnnon(ann_template, "", moment(datetime_interval_end == null ? roundDateToInterval(new Date(), interval) : roundDateToInterval(datetime_interval_end, interval)).format('YYYY-MM-DDTHH:mm'), 0.1, 'red')
+      )
+
+
+      Plotly.newPlot('chart_predic_ohlc', traces, layout, settings);
+      additionalTransformations('#chart_predic_ohlc')
+  }
+
+  function additionalTransformations(parent) {
+      var svg = Plotly.d3;
+
+      var yticks = svg.selectAll(parent+" .ytick");
+      var xticks = svg.selectAll(parent+" .xtick");
+
+
+      //svg.select(parent+".ytick:last-of-type").remove(); // delete most top y-label
+      //svg.select(parent+" .ytick:first-of-type").remove(); // delete bot top y-label
+
+
+      var y_w_t = Math.ceil(svg.selectAll(parent + " .ytick")[0][0].getBoundingClientRect().width);
+      yticks.attr("transform", "translate(" + (y_w_t * 2) + ",-7)");
+
+      //svg.select(parent+".xtick:last-of-type").remove(); // delete most right x-label
+      svg.select(parent + " .xtick:first-of-type").remove(); // delete most left x-label
+      xticks.attr("transform", "translate(0,-15)");
+
+      //xticks.attr("style", "opacity:0.3;");
+      //yticks.attr("style", "opacity:0.3;");
+  }
+
+  function parseDateTime_dt(str, format) {
+      if (typeof format == "undefined" || format == null) {
+          format = "YYYY-MM-DDTHH:mm";
+      }
+      return moment.utc(str, format).local();
+  }
+
+  function parseDateTime_string(str, format) {
+      if (typeof format == "undefined" || format == null) {
+          format = "YYYY-MM-DDTHH:mm";
+      }
+      return parseDateTime_dt(str).format(format);
+  }
+
+  var trace_hist = null;
+  var trace_predic = null;
+
+  function draw_predictionsChart_mobile(data) {
+      var ret = [];
+      if (!data || data.length == 0) {
+          console.log("empty predictions");
+          if (trace_hist !== null) ret.unshift(trace_hist)
+          if (trace_predic !== null) ret.unshift(trace_predic)
+          return ret;
+      }
+
+
+      if (data.price !== undefined && Object.keys(data.price).length > 0) {
+          var _trace_hist = {
+              name: 'Price avg',
+              x: [],
+              y: [],
+              type: 'scatter',
+              fillcolor: '#000',
+              line: {
+                  shape: 'spline',
+                  smoothing: 0,
+                  color: '#555'
+              },
+              mode: 'lines+markers',
+              'showlegend': false,
+          };
+          var empty = true;
+          $.each(data.price, function(k, val) {
+              var dt = parseDateTime_string(k);
+              _trace_hist.x.push(dt);
+              _trace_hist.y.push((val.open + val.close + val.low + val.high) / 4);
+              empty = false;
+          });
+          if (!empty) trace_hist = _trace_hist;
+          ret.unshift(trace_hist)
+      }
+
+      if (data.predictions !== undefined && data.predictions.avg !== undefined && Object.keys(data.predictions.avg).length > 0) {
+          $.each(data.predictions, function(uid, arr) {
+              var _trace_predic = {
+                  x: [],
+                  y: [],
+                  type: 'scatter',
+                  fillcolor: 'purple',
+                  line: {
+                      shape: 'spline',
+                      smoothing: 0,
+                      color: 'purple'
+                  },
+                  mode: 'lines+markers',
+                  opacity: 1,
+
+                  'legendgroup': 'Predictions',
+                  'name': 'Predictions',
+                  'showlegend': false,
+              };
+              var empty = true;
+              $.each(arr, function(dt, val) {
+                  _trace_predic.x.push(parseDateTime_string(dt));
+                  _trace_predic.y.push((val.open + val.close + val.low + val.high) / 4);
+                  empty = false;
+              });
+              var color = _trace_predic.y[0] > _trace_predic.y.slice(-1)[0] ? 'orange' : 'green'
+              _trace_predic.fillcolor = color
+              _trace_predic.line.color = color
+
+              if (!empty) trace_predic = _trace_predic;
+              ret.unshift(trace_predic)
+          });
+      } else if (trace_predic != null) {
+        ret.unshift(trace_predic)
+      }
+
+
+      return ret;
+  }
+
+  var trace_hist_ohlc = null;
+  var trace_predic_ohlc = null;
+
+  function draw_predictionsChart_mobile_ohlc(data) {
+      var ret = [];
+      if (!data || data.length == 0) {
+          console.log("empty predictions");
+          if (trace_hist_ohlc !== null) ret.unshift(trace_hist_ohlc)
+          if (trace_predic_ohlc !== null) ret.unshift(trace_predic_ohlc)
+          return ret;
+      }
+
+
+      if (data.price !== undefined && Object.keys(data.price).length > 0) {
+          var _trace_hist_ohlc = {
+              name: 'Price avg',
+              x: [],
+              low: [],
+              open: [],
+              close: [],
+              high: [],
+              type: 'candlestick',
+              decreasing: {
+                  line: {
+                      color: '#f75656'
+                  }
+              },
+              increasing: {
+                  line: {
+                      color: '#6bf755'
+                  }
+              },
+              line: {
+                  color: 'rgba(31,119,180,1)'
+              },
+          };
+          var empty = true;
+          $.each(data.price, function(k, val) {
+              var dt = parseDateTime_string(k);
+              _trace_hist_ohlc.x.push(dt);
+              _trace_hist_ohlc.low.push(val.low);
+              _trace_hist_ohlc.open.push(val.open);
+              _trace_hist_ohlc.close.push(val.close);
+              _trace_hist_ohlc.high.push(val.high);
+              empty = false;
+          });
+          if (!empty) trace_hist_ohlc = _trace_hist_ohlc;
+          ret.unshift(trace_hist_ohlc)
+      }
+
+      if (data.predictions !== undefined && data.predictions.avg !== undefined && Object.keys(data.predictions.avg).length > 0) {
+          $.each(data.predictions, function(uid, arr) {
+              var _trace_predic_ohlc = {
+                  x: [],
+                  low: [],
+                  open: [],
+                  close: [],
+                  high: [],
+                  type: 'candlestick',
+                  decreasing: {
+                      line: {
+                          color: 'orange'
+                      }
+                  },
+                  increasing: {
+                      line: {
+                          color: 'green'
+                      }
+                  },
+                  line: {
+                      color: 'rgba(31,119,180,1)'
+                  },
+              };
+
+              var empty = true;
+              $.each(arr, function(dt, val) {
+                  _trace_predic_ohlc.x.push(parseDateTime_string(dt));
+
+                  _trace_predic_ohlc.low.push(val.low);
+                  _trace_predic_ohlc.open.push(val.open);
+                  _trace_predic_ohlc.close.push(val.close);
+                  _trace_predic_ohlc.high.push(val.high);
+                  empty = false;
+              });
+             
+              if (!empty) trace_predic_ohlc = _trace_predic_ohlc;
+              ret.unshift(trace_predic_ohlc)
+          });
+      } else if (trace_predic_ohlc != null) {
+        ret.unshift(trace_predic_ohlc)
+      }
+
+      return ret;
+  }
+</script>
+
+
+</body>
+</html>

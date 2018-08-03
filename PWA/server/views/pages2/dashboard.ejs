@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+
+</head>
+<body class="inner2">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <strong class="logo d-none d-lg-block"><a href="#"><img src="images/ico-logo2x.png" alt="crypto predicted"></a></strong>
+        <div class="inner-container">
+          <a href="#" class="nav-opener sm"><span class="icon-nav"></span><span class="icon-cancel"></span></a>
+          <strong class="title">Dashboard</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+        <div class="sub-container">
+          <!-- user nav -->
+          <nav class="user-nav">
+            <ul>
+              <!-- <li class="watchlist"><a href="predictions">Predictions</a></li>
+              <li class="notification"><a href="signals">Trade signals</a></li> -->
+              <li class="profile"><a href="profile">Profile</a></li>
+              <li class="amount"><a href="billing">Billing</a></li>
+              <li class="terms"><a href="faq">FAQs</a></li>
+              <li class="support"><a href="support">Support</a></li>
+              <li class="terms"><a href="terms">Terms and Privacy</a></li>
+              <li class="home"><a href="/">Homepage</a></li>
+              <li class="loved"><a href="/partner">Partners</a></li>
+              <li class="locked"><a href="logout">Log out</a></li>
+            </ul>
+          </nav>
+
+          <!-- watchlist-box -->
+          <div class="watchlist-box">
+            <ul>
+            	<li><a class="title" href="signals">Trade signals</a>  <a href="signals" class="btn-next"></a></li>
+             	<li><a class="title" href="predictions">Predictions</a>  <a href="predictions" class="btn-next"></a></li>
+              
+            </ul>
+          </div>
+
+          <h4 style="text-align: center;margin: 100px auto;">Join us on <a style="color:#1111da;" href="https://t.me/crypto_predicted" target="_blank">telegram</a>.</h4>
+
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_blue') %>
+  </div>
+</body>
+</html>

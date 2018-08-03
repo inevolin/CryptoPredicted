@@ -1,0 +1,5 @@
+echo " Do pm2 startup to make it configure itself for auto-booting"
+echo " Launch all node js applications using the start.sh (using pm2 start ...)"
+echo " Then do pm2 save"
+echo " this will record/save the list of running nodejs apps"
+echo " so that these will restarted used during next boot"

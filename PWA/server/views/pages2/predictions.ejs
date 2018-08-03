@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+
+</head>
+<body class="inner2">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Predictions</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <!-- tabs bar -->
+      <div class="tabs-bar">
+        <div class="container">
+          <!-- tabs list -->
+          <ul class="tabs-list">
+            <!-- <li><a href="#">BITCOIN <span>Market</span></a></li> -->
+            <li class="active"><a href="#">USDT <span>Market</span></a></li>
+            <!-- <li><a href="#">ETHEREUM <span>Market</span></a></li> -->
+          </ul>
+        </div>
+      </div>
+      <div class="container">
+        <div class="sub-container">
+
+          <!-- watchlist-box -->
+          <div class="watchlist-box">
+            <ul>
+              <li><a class="title" href="price?base=BTC&quote=USDT"><strong>btc</strong> bitcoin</a>  <a href="price?base=BTC&quote=USDT" class="btn-next"></a></li>
+              <li><a class="title" href="price?base=ETH&quote=USDT"><strong>eth</strong> ethereum</a> <a href="price?base=ETH&quote=USDT"  class="btn-next"></a></li>
+              <li><a class="title" href="price?base=LTC&quote=USDT"><strong>ltc</strong> litecoin</a> <a href="price?base=LTC&quote=USDT"  class="btn-next"></a></li>
+
+              <li><a class="title" href="price?base=BCC&quote=USDT"><strong>bcc</strong> bitcoin cash</a> <a href="price?base=BCC&quote=USDT"  class="btn-next"></a></li>
+
+              <li><a class="title" href="price?base=NEO&quote=USDT"><strong>neo</strong> NEO</a> <a href="price?base=NEO&quote=USDT"  class="btn-next"></a></li>
+            </ul>
+          </div>
+
+          <h4 style="text-align: center;margin: 100px auto;">Join us on <a style="color:#1111da;" href="https://t.me/crypto_predicted" target="_blank">telegram</a>.</h4>
+          
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_blue') %>
+  </div>
+</body>
+</html>

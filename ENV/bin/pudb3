@@ -1,0 +1,10 @@
+#!/home/cryptopredicted/ENV/bin/python3.5
+# EASY-INSTALL-ENTRY-SCRIPT: 'pudb==2017.1.4','console_scripts','pudb3'
+__requires__ = 'pudb==2017.1.4'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('pudb==2017.1.4', 'console_scripts', 'pudb3')()
+    )

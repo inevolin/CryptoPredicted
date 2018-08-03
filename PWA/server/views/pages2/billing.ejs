@@ -1,0 +1,273 @@
+  <!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <style>
+    p a:hover {
+      color:black !important;
+    }
+  </style>
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Premium Membership</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+        <div class="sub-container" style="padding-bottom:35px; ">
+
+          <% if (typeof success !== 'undefined' && success == 1) { %>
+          <!-- post-payment block -->
+          <div class="subscription-block" style="min-height: auto; margin-bottom: 30px; padding-top: 30px;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center;">
+              <div class="col-lg-12">
+                <h4 class="m-b-20">Thank you!</h4>
+                  <p>
+                    <strong>Processing payment <i class="fa fa-spin fa-circle-o-notch"></i></strong> <br>
+                    Usually this takes just a second :) <br><br>
+                    Once the payment has been received and processed by our system you will be redirected. But you may also leave this page, we will send you an email when it's ready. If this process takes more than 15 minutes please reach out to our support team.
+                  </p>
+                  <script>
+                    var tmrticks = 0;
+                    var premiumTmr = setInterval(function() {getIsPremium()}, 2000); // check every 2 seconds
+                    function getIsPremium() {
+                      $.get( "check-premium", function( data ) {
+                        if (data == "1") {
+                          console.log("you are now premium, redirecting!")
+                          //window.location.replace( window.location.protocol + '//' + window.location.host + window.location.pathname );
+                          window.location.replace( window.location.protocol + '//' + window.location.host + '/dashboard' );
+                        } else if (data == "0") {
+                          console.log("ping pong");
+                        } else {
+                          clearInterval(premiumTmr);
+                          alert("Something went very wrong. Try refreshing this page or contact support.");
+                        }
+                        if (tmrticks++ >= 30) {
+                          window.location.replace( window.location.protocol + '//' + window.location.host + window.location.pathname );
+                        }
+                      });
+                    }
+                  </script>
+              </div>
+            </div>
+          </div>
+          <% } else %>
+          <% if (typeof success !== 'undefined' && success == 0) { %>
+          <div class="subscription-block" style="min-height: auto; margin-bottom: 30px;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center;">
+              <div class="col-lg-12">
+                <h4 class="m-b-20">Oops.</h4>
+                  <p>
+                    Something went wrong during the checkout process. Please try again or reach out to us for additional support.
+                  </p>
+              </div>
+            </div>
+          </div>
+          <% } %>
+
+          <% if (typeof findActiveTrialExpiry !== 'undefined' && findActiveTrialExpiry !== null && (typeof payments == 'undefined')) { %>
+          <div class="subscription-block" style="min-height: auto; margin-bottom: 30px; padding-top:30px;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center;">
+              <div class="col-lg-12">
+                <h4 class="m-b-20">Trial account</h4>
+                  <p>
+                    Your trial period ends on <%= moment(findActiveTrialExpiry).format('Do MMMM, YYYY (HH:mm)'); %>
+                  </p>
+              </div>
+            </div>
+          </div>
+          <% } %>
+
+          <% if (typeof need_to_pay !== 'undefined' && need_to_pay == 1) { %>
+          <div class="form" style="margin:0 auto 15px; max-width:100%; padding: 50px 0px 60px 0px;">
+
+            
+
+            <% if (typeof mayActivateTrial !== 'undefined' && mayActivateTrial == true) { %>
+            <div class="row" style="margin:10px 0px 0px 0px;">
+              <div class="col-lg-12">
+                <a id="doTrial" style="width:100%; max-width:300px; margin:0 auto; color:white; " href="#" class="btn-card">Start 7-day trial</a>
+              </div>
+            </div>
+            <div class="row" style="margin:20px 0px 20px 0px;">
+              <div class="col-lg-12">
+                <span class="or" style="margin-bottom: 0;">or</span>
+              </div>
+            </div>
+            <script>
+              $('#doTrial').on('click', function() {
+                  var form = '';
+                  form += '<form style="display:none;" method="POST" action="billing">';
+                  form += '<input name="payment" value="trial"></input>';
+                  form += '<input name="coupon" value="'+$('#coupon').val()+'"></input>';
+                  form += '</form>';
+                  $(form).appendTo('body').submit();
+                });
+            </script>
+            <% } %>
+
+            <div class="row" style="margin:10px 0px 10px 0px;">
+              <div class="col-lg-12" style="margin:0 auto; text-align: center;">
+                <p>
+                  <strong class="subtitle">become a Premium member</strong>
+                </p>
+              </div>
+            </div>
+
+            
+
+            <div class="row" style="margin:20px 0px 20px 0px;">
+              <div class="col-lg-12" style="max-width: 320px; margin: 0 auto;">
+                <p style="margin:0 auto; ">
+                  <strong id="total">Total: <span id="price"><%= amount %></span>/mo. </strong><br>
+                  <strong id="new_total" style="display: none;">New total: <span id="new_price"></span>/mo. <br></strong>
+                  <span>The price is monthly and includes VAT.</span>
+                </p>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin:10px 0px 0px 0px;">
+              <div class="col-lg-12">
+                <div class="form" style="margin:0 auto;">
+                  <div class="form-group input-focused" style="padding: 16px 0px 0px 0px;">
+                    <label for="coupon" style="left: 0;">Coupon code (optional):</label>
+                    <input style=" text-align: center;" class="form-control" name="coupon" id="coupon" type="text">
+                    <script>
+                      $('#coupon').on('input',function(e){
+                        var v = $('#coupon').val();
+                        if (v && v.length > 0) {
+                          applyCoupon()
+                        }
+                      });
+                      $(document).ready(function() {
+                        var v = $('#coupon').val();
+                        if (v && v.length > 0) {
+                          applyCoupon()
+                        }
+                      });
+                      function applyCoupon() {
+                        $.get( "check-coupon?coupon="+$('#coupon').val(), function( data ) {
+                          if (data == "0") {
+                            console.log("invalid coupon")
+                            $("#coupon").css('color', 'red');
+                          } else {
+                            console.log("valid coupon")
+                            
+                            $("#coupon").prop('disabled', true);
+                            $("#coupon").css('color', 'green');
+                            $("#new_total").show();
+                            $("#new_price").text(data);
+                            $("#price").css("text-decoration", "line-through");
+                          }
+                        });
+                      }
+                    </script>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+
+            <div class="row" style="margin:10px 0px 0px 0px;">
+              <div class="col-lg-12">
+                <a id="paypal_button" style="width:100%; max-width:300px; margin:0 auto;  margin-bottom:5px; " href="#" class="btn-card paypal"><img src="images/logo-paypal.png" alt="paypal"></a>
+                <a id="stripe_button" style="width:100%; max-width:300px; margin:0 auto; " href="#" class="btn-card"><span class="ico-card"></span> <span>Card</span></a>
+
+                <script src="//checkout.stripe.com/v2/checkout.js"></script>
+                <script>
+                  $('#stripe_button').on('click', function() {
+                    var handler = StripeCheckout.configure({
+                      key: "<%= keyPublishable %>",
+                      token: function(args) {
+                        var form = '';
+                        form += '<form style="display:none;" method="POST" action="billing">';
+                        form += '<input name="payment" value="stripe"></input>';
+                        form += '<input name="stripeEmail" value="'+args.email+'"></input>';
+                        form += '<input name="stripeToken" value="'+args.id+'"></input>';
+                        form += '<input name="coupon" value="'+$('#coupon').val()+'"></input>';
+                        form += '</form>';
+                        $(form).appendTo('body').submit();
+                      }
+
+                    });
+                    handler.open()
+                  });
+
+                  $('#paypal_button').on('click', function() {
+                    var form = '';
+                    form += '<form style="display:none;" method="POST" action="billing">';
+                    form += '<input name="payment" value="paypal"></input>';
+                    form += '<input name="coupon" value="'+$('#coupon').val()+'"></input>';
+                    form += '</form>';
+                    $(form).appendTo('body').submit();
+                  });
+                </script>
+              </div>
+            </div>
+
+          </div>
+          <% } %>
+
+          
+
+          <% if (typeof payments !== 'undefined') { %>
+          <!-- notifications block -->
+          <div class="subscription-block" style="min-height: auto;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center; padding-top: 30px;">
+              <div class="col-lg-12">
+                <strong class="subtitle">Subscription history</strong>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th><strong>Date</strong></th>
+                  <th><strong>Amount</strong></th>
+                  <th><strong>Method</strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% payments.forEach(function(pay) { %>
+                  <tr>
+                    <td> <%= pay.date_pretty %> </td>
+                    <td> <%= pay.amount %>&nbsp;<%= pay.currency %> </td>
+                    <td> <%= pay.source %> </td>
+                  </tr>
+                <% }); %>
+
+              </tbody>
+            </table>
+            <p>To unsubscribe please send use a quick email at <a href="mailto:support@cryptopredicted.com">support@cryptopredicted.com</a></p>
+          </div>
+          <% } %>
+          
+        </div>
+      </div>
+
+
+    </main>
+  </div>
+
+
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>

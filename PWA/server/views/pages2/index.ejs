@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <!-- carousel -->
+  <script src="js/slick.min.js" ></script>
+  <link rel="stylesheet" href="css/slick.css">
+  <link rel="stylesheet" href="css/slick-theme.css">
+
+  <style>
+  	@media (max-width: 768px) {
+  		.clickshow {
+  			white-space: inherit;
+  		}
+  		.clickshow li {
+  			.active;
+  		}
+  		.steps-list li:hover::before, .steps-list li::before {
+		    color: #fff;
+		    background: #111da5;
+		}
+		.steps-list li a::after {
+		    opacity: 1;
+		    visibility: inherit;
+		}
+  	}
+
+  	@media (max-width: 768px) {
+  		.process-list {
+  			white-space: inherit;
+  		}
+  	}
+
+  	@media (max-width: 768px) {
+  		.team-block .team-member, .team-block .member-details {
+  			display: block;
+  		}
+  	}
+
+  	@media (max-width: 768px) {
+	  	.member-details .text, .member-details .text:first-child {
+	  		padding:10px;
+	  		width: 100%;
+	  		display: block;
+	  	}
+	}
+	@media (min-width: 768px) {
+	  	.member-details .text, .member-details .text:first-child {
+	  		padding:20px;
+	  		width: 33%;
+	  		display: block;
+	  	}
+	}
+
+	.logo-carousel .slideset {
+		white-space: inherit;
+	}
+
+	.tabclickshow li {
+		opacity: .3;
+	}
+	.tabclickshow li.active {
+		opacity: 1;
+	}
+
+  </style>
+
+  <script>
+  
+    $(document).ready(function() {
+      // clickshow
+      $('.clickshow li').on('click', function() {
+        if (!$(this).hasClass('active')) {
+          $('.clickshow .active').removeClass('active');
+          $(this).addClass('active');
+        }
+        return false;
+      });
+
+
+      // tabclickshow
+      $('.tabclickshowDetail').css('display', 'none');
+      $('.tabclickshow div[data-id='+ $('.tabclickshow li.active').data('id') +']').css('display', 'block');
+      $('.tabclickshow li').on('click', function() {
+        if (!$(this).hasClass('active')) {
+          $('.tabclickshow .active').removeClass('active');
+          $(this).addClass('active');
+
+          $('.tabclickshowDetail').css('display', 'none');
+          var id = $(this).data('id');
+          $('.tabclickshow div[data-id='+id+']').css('display', 'block');
+
+          
+          $('html,body').animate({
+          	scrollTop: $('.tabclickshow div[data-id='+id+']').offset().top - 100
+          });
+
+        }
+        return false;
+      });
+
+
+      // tabclickshow
+      /*$('.team-block .member-details').css('display', 'none');
+      $('.team-block .member-details[data-id=0]').css('display', 'block');
+      $('.team-member').on('click', function() {
+        $('.team-block .member-details').css('display', 'none');
+        var id = $(this).data('id');
+        $('.team-block .member-details[data-id='+id+']').css('display', 'block');
+      });*/
+
+
+      // carousel
+      $('.single-item').slick({
+        arrows: false,
+      });
+      $('.lovedBy .btn-prev').on('click', function() {
+        $('.lovedBy .single-item').slick('slickPrev');
+        return false;
+      });
+      $('.lovedBy .btn-next').on('click', function() {
+        $('.lovedBy .single-item').slick('slickNext');
+        return false;
+      });
+
+    });
+
+    $(document).ready(function() {
+    	$('#nav li.started').on('click', function() {
+    		$('html,body').animate({
+	          	scrollTop: $('.started-block').offset().top - 50
+	        });
+	        return false;
+    	});
+    	$('#nav li.loved').on('click', function() {
+    		$('html,body').animate({
+	          	scrollTop: $('.lovedBy').offset().top - 50
+	        });
+	        return false;
+    	});
+    	$('#nav li.works').on('click', function() {
+    		$('html,body').animate({
+	          	scrollTop: $('.process-block').offset().top - 50
+	        });
+	        return false;
+    	});
+
+    	$('#nav li.about').on('click', function() {
+    		$('html,body').animate({
+	          	scrollTop: $('.team-block').offset().top - 50
+	        });
+	        return false;
+    	});
+
+    	$('#nav li.investors').on('click', function() {
+    		$('html,body').animate({
+	          	scrollTop: $('.investors-block').offset().top - 50
+	        });
+	        return false;
+    	});
+    });
+  
+  </script>
+</head>
+<body class="home">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <a href="#" class="nav-opener"><span class="icon-nav"></span><span class="icon-cancel"></span></a>
+        <ul class="add-links">
+          <li><a class="amount" href="pricing"><span class="d-none d-md-block">pricing</span></a></li>
+          <li><a class="support" href="support"><span class="d-none d-md-block">support</span></a></li>
+          <li><a class="locked" href="login"><span class="d-none d-md-block">Login</span></a></li>
+        </ul>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <!-- visual block -->
+      <section class="visual-block">
+        <div class="container px-0">
+          <div class="row no-gutters">
+            <div class="col-12 col-md-6">
+              <!-- logo wrap -->
+              <div class="logo-wrap">
+                <strong class="logo"><img src="images/logo.png" alt="cryptopredicted"></strong>
+                <nav id="nav">
+                  <strong class="title">menu</strong>
+                  <ul>
+                    <li class="started"><a href="#">How to get started</a></li>
+                    <li class="loved"><a href="#">Loved by</a></li>
+                    <li class="works"><a href="#">What we do</a></li>
+                    <li class="about"><a href="#">Who we are</a></li>
+                    <li class="investors"><a href="#">Investors &amp; Advisors</a></li>
+                    <li class="pricing"><a href="pricing">Roadmap &amp; Pricing</a></li>
+                    <li class="list"><a href="faq">FAQs</a></li>
+                    <li class="support"><a href="support">Contact</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <!-- slideshow -->
+              <div class="slideshow">
+                <div class="slideset">
+                    <div class="slide">
+                      <div class="textbox">
+                        <h1>
+                          <!-- Be a winner, use <strong>AI</strong> to trade smarter. -->
+                          Use AI-generated buy&nbsp;&amp;&nbsp;sell <strong>trading signals</strong> to maximize your returns.
+                        </h1>
+                        <a href="signup" class="btn-started" style="padding-left:60px; text-align: left; padding-right: 0px;">Sign up 7-day trial</a>
+                      </div>
+                    </div>
+                </div>
+               
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- information section -->
+      <section class="information-section pb-4 pb-md-9">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <div class="box">
+                <strong class="subtitle">User Daily <span>growth</span></strong>
+                <span class="num">150 <span>%</span></span>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="box">
+                <strong class="subtitle">Supported <span>coins</span></strong>
+                <span class="num">+4</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="box">
+                <strong class="subtitle">Served <span>countries</span></strong>
+                <span class="num">134</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- started block -->
+      <section class="section started-block">
+        <div class="main-container">
+          <h2>HOW TO GET STARTED</h2>
+          <div class="container">
+            <div class="slide-wrap">
+              <ul class="steps-list clickshow">
+                <li data-id="0" class="active">
+                  <div class="text">
+                    <a href="#">Sign up for a 7-day trial.</a>
+                  </div>
+                  <div class="img-holder"><img src="images/img01.png" alt="img description"></div>
+                </li>
+                <li data-id="1">
+                  <div class="text">
+                    <a href="#">Select your coin(s) and watch the predictions.</a>
+                  </div>
+                  <div class="img-holder"><img src="images/img02.png" alt="img description"></div>
+                </li>
+                <li data-id="2">
+                  <div class="text">
+                    <a href="#">Subscribe to our trading signals and stay notified.</a>
+                  </div>
+                  <div class="img-holder"><img src="images/img03.png" alt="img description"></div>
+                </li>
+              </ul><!-- 
+              <a href="#" class="btn-prev disabled"></a>
+              <a href="#" class="btn-next"></a> -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- customer block -->
+      <section class="section customer-block">
+        <div class="container lovedBy">
+          <h2>love by</h2>
+          <!-- carousel -->
+          <div class="carousel">
+            <div class="mask">
+              <div class=" single-item"> <!-- slideset slider -->
+
+                <div class="slide">
+                  <div class="text" style="max-width:80%; margin:0 auto; padding: 0 40px;">
+                    <p>Taimoor K. <a href="https://www.linkedin.com/in/taimoorkibria" target="_blank">LinkedIn</a> </p>
+                    <p></p>
+                    <p style="color:#7d7d7d; text-align: left;"> I have been following CryptoPredicted's progress for a while now on BHW forum as well as on Medium blog. Their initial mobile app was also very useful and personally I have been searching for a reliable and economical service which can provide algorithmic real-time trade predictions and signals. I have used the service with Binance exchange and have made a profit on ETH-USDT trades. I would highly recommend this service to people who are interested in cryptocurrency trading, it is suitable for both professional and beginner traders.</p>
+                  </div>
+                </div>
+
+                <div class="slide">
+                  <div class="text" style="max-width:80%; margin:0 auto; padding: 0 40px;">
+                    <p>Aleksandar </p>
+                    <p></p>
+                    <p style="color:#7d7d7d; text-align: left;">
+                      I'm on 7 days trial also. The application provides very useful data and gets improved frequently. However, one should not turn off his brain while making final decisions. Although in future I expect to see trading bots doing all the work. But first we need to support this team if we have trust in them to achieve so. Then, everything will be much easier !
+                    </p>
+                  </div>
+                </div>
+
+                <div class="slide">
+                  <div class="text" style="max-width:80%; margin:0 auto; padding: 0 40px;">
+                    <p>John </p>
+                    <p></p>
+                    <p style="color:#7d7d7d; text-align: left;">
+                      After several conversations with the team, I decided to sign up. As a crypto trader I find their AI predictions pretty accurate, but the most valuable feature to me are their trading signals. I love the email notifications, they remind me to stay focused and make sure I don't miss any entry or exit opportunities. I can't wait for them to add more coins and algorithms.
+                    </p>
+                  </div>
+                </div>
+
+                
+                
+              </div>
+            </div>
+            <a href="#" style="top:70px;" class="btn-prev"></a>
+            <a href="#" style="top:70px;" class="btn-next"></a>
+            </div>
+        </div>
+      </section>
+      <!-- process block -->
+      <section class="section process-block">
+        <div class="container">
+          <h2>Our core specialization</h2>
+          <div class="slide-wrap">
+            <!-- process list -->
+            <ul class="process-list">
+              <li>
+                <div class="holder">
+                  <div class="img-holder"><img src="images/icon01.png" alt="img description"></div>
+                  <div class="txt">
+                    <p>We gather massive amounts of data and create A.I. driven <strong>predictions</strong> for various crypto markets.</p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="holder">
+                  <div class="img-holder"><img src="images/icon02.png" alt="img description"></div>
+                  <div class="txt">
+                    <p>We develop profitable <strong>trading algorithms</strong>, allowing you to subscribe to these signals.</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <!-- <a href="#" class="btn-prev disabled"></a>
+            <a href="#" class="btn-next"></a> -->
+          </div>
+        </div>
+      </section>
+      <!-- team block -->
+      <section class="section team-block">
+        <div class="container">
+          <h2>Who we are</h2>
+          <!-- head -->
+          <header class="head">
+            <div class="logo-box"><img src="images/logo.png" alt="cryptopredicted"></div>
+            <div class="textbox">
+              <p>
+                It all started as a humble project using math, statistics, machine learning and later A.I. to reduce the risk of investing in crypto. Today we have bundled all our knowledge and resources into a single app accessible for everyone.
+              </p>
+            </div>
+          </header>
+          <!-- subhead -->
+          <div class="subhead">
+            <div class="titlebox">
+              <h2>the Team</h2>
+            </div>
+            <div class="arrow"><span class="icon-arrow"></span></div>
+          </div>
+          <div class="row">
+            <!-- team member -->
+            <article class="col-12 col-md-4 team-member" data-id="0">
+              <div class="img-holder">
+                <img src="images/ilya.png" alt="img description" >
+              </div>
+              <div class="text">
+                <h3>Product</h3>
+                <span class="designation">Ilya | co-founder</span>
+                <a href="https://www.linkedin.com/in/iljanevolin/" target="_blank" class="icon-linkedin"></a>
+              </div>
+            </article>
+            <!-- team member -->
+            <article class="col-12 col-md-4 team-member" data-id="1">
+              <div class="img-holder">
+                <img src="images/micah.png" alt="img description" >
+              </div>
+              <div class="text">
+                <h3>Design</h3>
+                <span class="designation">Micah | co-founder</span>
+                <a href="https://www.linkedin.com/in/micah-d-s-8a361744/" target="_blank" class="icon-linkedin"></a>
+              </div>
+            </article>
+            <!-- team member -->
+            <article class="col-12 col-md-4 team-member" data-id="2">
+              <div class="img-holder">
+                <img src="images/elder.png" alt="img description" >
+              </div>
+              <div class="text">
+                <h3>Analysis</h3>
+                <span class="designation">Elderkin | consultant</span>
+                <a href="https://www.linkedin.com/in/elderkin-mwilitsa-06890446/" target="_blank" class="icon-linkedin"></a>
+              </div>
+            </article>
+          </div>
+          <!-- member details -->
+          <div class="member-details"  data-id="0">
+            <div class="text">
+              <p>Ilya is the co-founder and entrepreneur. Has a background in computer science, knowledgable of automation, A.I. and algorithmic design.</p>
+            </div>
+            <div class="text">
+              <p>Micah is the co-founder and UI/UX expert. As a well-connected individual he connects us with key strategic partners and investors.</p>
+            </div>
+            <div class="text">
+              <p>Elderkin brings his hedge fund experiences to the table. A very knowledgable individual with strong mathematical finance skills.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <!-- investors block -->
+      <section class="section investors-block">
+        <div class="container">
+          <header class="subhead">
+            <div class="titlebox">
+              <h2>advisors &amp; <br> Investors</h2>
+            </div>
+            <div class="arrow"><span class="icon-arrow"></span></div>
+            <div class="text">supporting innovative and disruptive projects</div>
+          </header>
+          <div class="row tabclickshow">
+            <div class="col-12 col-md-5">
+              <ul class="tabset">
+                <li data-id=0 class="active"><a href="#"><img src="images/investor1.png" alt="img description"></a></li>
+                <li data-id=1><a href="#"><img src="images/investor2.png" alt="img description"></a></li>
+                <!-- <li data-id=2><a href="#"><img src="images/img07.png" alt="img description"></a></li>
+                <li data-id=3><a href="#"><img src="images/img08.png" alt="img description"></a></li> -->
+              </ul>
+            </div>
+
+            <div class="col-12 col-md-7 tabclickshowDetail"  data-id=0>
+              <div class="textbox">
+                <div class="title-head">
+                  <h3>Dino Dogan</h3>
+                  <span class="designation"> Entrepreneur </span>
+                  <a href="https://www.linkedin.com/in/dinodogan/" target="_blank" class="icon-linkedin"></a>
+                </div>
+                <p>Built, sold, & acquired companies. Trained engineers. Managed developers. Designed products. Hired and developed talent. </p>
+                <p>Engineer with a strong business background and extensive experience in executing customer acquisition strategies and improving internal processes.</p>
+              </div>
+            </div>
+          
+
+            <div class="col-12 col-md-7 tabclickshowDetail"  data-id=1>
+              <div class="textbox">
+                <div class="title-head">
+                  <h3>Cam Beaury</h3>
+                  <span class="designation"> Entrepreneur </span>
+                  <a href="#" class="icon-linkedin"></a>
+                </div>
+                <p>Founder and software engineer. Co-founded Insurance Skout, a software company in the health insurance space.</p>
+                <p>He's a software engineer specializing in Ruby on Rails, Javascript, and SQL. Enjoys creating software, especially on the backend working with databases and APIs.</p>
+              </div>
+            </div>
+          
+
+            <div class="col-12 col-md-7 tabclickshowDetail"  data-id=2>
+              <div class="textbox">
+                <div class="title-head">
+                  <h3>Coming soon</h3>
+                  <span class="designation"> Coming soon </span>
+                  <a href="#" class="icon-linkedin"></a>
+                </div>
+                <p>Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon</p>
+                <p>Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon</p>
+              </div>
+            </div>
+          
+
+            <div class="col-12 col-md-7 tabclickshowDetail"  data-id=3>
+              <div class="textbox">
+                <div class="title-head">
+                  <h3>Coming soon</h3>
+                  <span class="designation"> Coming soon </span>
+                  <a href="#" class="icon-linkedin"></a>
+                </div>
+                <p>Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon</p>
+                <p>Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon Coming soon</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <!-- hiring block -->
+      <div class="section hiring-block">
+        <div class="container">
+          <div class="holder">
+            <div class="titlebox">
+              <h2>Subscribe</h2>
+            </div>
+            <form action="#">
+              <div class="field">
+                <input type="email" id="email" placeholder="Enter your email ">
+                <button type="submit" id="optin" class="btn-submit"><span>Submit</span></button>
+                <script>
+                  $('#optin').on('click', function() {
+                    $.ajax({
+                      type: 'POST',
+                      data: JSON.stringify({'email': $('#email').val()}),
+                      contentType: 'application/json',
+                      url: 'optin',            
+                      success: function(data) {
+                          console.log(data)
+                          if (typeof data == 'object' && 'ok' in data && data.ok==1) {
+                            $('#email').val('');
+                            alert("Thank you!");
+                          } else {
+                            alert("Something went wrong, maybe invalid email?");
+                          }
+                      }
+                    });
+                    return false;
+                  })
+                </script>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- media block -->
+      <section class="section media-block">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-2">
+              <h2>media</h2>
+            </div>
+            <div class="col-12 col-md-10">
+              <!-- logo carousel -->
+              <div class="logo-carousel">
+                <div class="mask">
+                  <div class="slideset">
+                    <div class="slide">
+                      <a href="https://medium.com/@cryptopredicted" target="_blank"><img src="images/logo01.png" alt="Medium blog"></a>
+                    </div>
+                    <div class="slide">
+                      <a ><img src="images/logo02.png" alt="img description"></a>
+                    </div>
+                    <div class="slide">
+                      <a ><img src="images/logo03.png" alt="img description"></a>
+                    </div>
+                  </div>
+                </div>
+                <!-- <a href="#" class="btn-prev disabled"></a>
+                <a href="#" class="btn-next"></a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- company block -->
+      <section class="section company-block">
+        <div class="container">
+          <h2>We are hiring!</h2>
+        </div>
+        <div class="container">
+          <h2>Join us on <a style="color:white;font-weight: bold;" href="https://t.me/crypto_predicted" target="_blank">telegram</a>. </h2>
+        </div>
+        <ul class="rates-list">
+          <li class="up">
+            <span class="rate">BTC/USD</span>
+          </li>
+          <li class="down">
+            <span class="rate">ETH/USD</span>
+          </li>
+          <li class="up">
+            <span class="rate">LTC/USD</span>
+          </li>
+          <li class="down">
+            <span class="rate">ETH/BTC</span>
+          </li>
+          <li class="up">
+            <span class="rate">LTC/BTC</span>
+          </li>
+          <li class="down">
+            <span class="rate">TRX/BTC</span>
+          </li>
+          <li class="up">
+            <span class="rate">BCC/BTC</span>
+          </li>
+          <li class="down">
+            <span class="rate">XRP/BTC</span>
+          </li>
+        </ul>
+      </section>
+    </main>
+    <!-- footer of the page -->
+    <footer id="footer">
+      <div class="container">
+        <!-- icons list -->
+        <ul class="icons-list">
+          <li style="height: 32px">
+            <a class="icon-copyright footericon"></a>
+            <span style="display: none; font-size:16px;">2017-2018 &copy; CryptoPredicted<br>All rights reserved.</span>
+          </li>
+          <li style="height: 32px">
+            <a class="icon-mail footericon" style="color:white;" href="mailto:support@cryptopredicted.com"></a>
+            <span style="display: none; font-size:16px; color:white;">
+              <a style="font-size:16px; color:white;" href="mailto:support@cryptopredicted.com">support@cryptopredicted.com</a>
+            </span>
+          </li>
+          <li style="height: 32px">
+            <a class="icon-pin footericon"></a>
+            <span style="display: none; font-size:16px;">New York City</span>
+          </li>
+        </ul>
+      </div>
+      <script>
+        $("#footer li").on({
+        mouseenter: function (e) {
+          $(e.currentTarget).find('span').show(0);
+          $(e.currentTarget).find('.footericon').hide(0);
+        }
+        });
+        $("#footer li").on({
+            mouseleave: function (e) {
+              console.log(e)
+              $(e.currentTarget).find('span').hide(0);
+              $(e.currentTarget).find('.footericon').show(0);
+            }
+        });
+      </script>
+    </footer>
+  </div>
+</body>
+</html>

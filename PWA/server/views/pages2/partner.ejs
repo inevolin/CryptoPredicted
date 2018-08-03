@@ -1,0 +1,111 @@
+  <!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <style>
+    p a:hover {
+      color:black !important;
+    }
+  </style>
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Partnership</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+        <div class="sub-container" style="padding-bottom:35px; ">
+
+
+          <% if (typeof isPartner !== 'undefined' && isPartner == 1) { %>
+
+          <div class="subscription-block" style="min-height: auto;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center; padding-top: 30px;">
+              <div class="col-lg-12">
+                <div class="form" style="margin:0 auto;">
+                  <div class="form-group input-focused" style="padding: 16px 0px 0px 0px;">
+                    <label for="coupon" style="left: 0;">Your unique coupon code:</label>
+                    <input style=" text-align: center; color:black;" class="form-control" name="coupon" id="coupon" type="text" readonly="readonly" value="<%= coupon %>" >
+                  </div>
+                  <div class="form-group input-focused" style="padding: 16px 0px 0px 0px;">
+                    <label for="commission" style="left: 0;">Your commission:</label>
+                    <input style=" text-align: center; color:black;" class="form-control" name="commission" id="commission" type="text" disabled="disabled" readonly="readonly" value="<%= commission %>%" >
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- notifications block -->
+          <div class="subscription-block" style="min-height: auto;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center; padding-top: 30px;">
+              <div class="col-lg-12">
+                <strong class="subtitle">Referrals</strong>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Commission</th>
+                  <th>Paid out?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (typeof stats !== 'undefined') { %>
+                <% stats.forEach(function(stat) { %>
+                  <tr>
+                    <td> <%= stat.date_pretty %> </td>
+                    <td> <%= stat.amount %>&nbsp;<%= stat.currency %> </td>
+                    <td> <%= stat.commission %>&nbsp;<%= stat.currency %> </td>
+                    <td> <%= stat.commission_paid %> </td>
+                  </tr>
+                <% }); %>
+                <% } %>
+
+              </tbody>
+            </table>
+          </div>
+          <% } else { %>
+          <div class="subscription-block" style="min-height: auto; margin-bottom: 30px; padding-top:30px;">
+            <div class="row" style="margin:0px 0px 20px 0px; text-align: center;">
+              <div class="col-lg-12">
+                <h4 class="m-b-20">Partnership program</h4>
+                  <p>
+                    This program is by invitation only. If you want to apply reach out to <a href="mailto:support@cryptopredicted.com">support@cryptopredicted.com</a>.
+                  </p>
+              </div>
+            </div>
+          </div>
+          <% } %>
+          
+        </div>
+      </div>
+
+
+    </main>
+  </div>
+
+
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <script>
+    $(document).ready(function() {
+      $('.price-map li').on('click', function(e) {
+        if (!$(this).closest('.liparent').hasClass('active')) {
+            $('.price-map .active').removeClass('active');
+            $(this).closest('.liparent').addClass('active');
+        }
+        return false;
+      });
+    });
+  </script>
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">price structure</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <!-- pricing block -->
+      <section class="pricing-block">
+        <div class="container">
+          <div class="sub-container" style="padding: 0;">
+
+            <!-- price map -->
+            <ul class="price-map">
+              <li style="cursor:pointer;" class="active liparent">
+                <strong class="month">May-Jun. 2018</strong>
+                <span class="circle"></span>
+                <div class="price"><sup>$</sup> 60</div>
+                <ul class="features">
+                  <li>Price predictions</li>
+                  <li>Trade signals</li>
+                  <li>More trading algorithms</li>
+                  <li>More crypto coins</li>
+                </ul>
+              </li>
+              <li style="cursor:pointer;" class="liparent">
+                <strong class="month">Jul. 2018</strong>
+                <span class="circle"></span>
+                <div class="price"><sup>$</sup> 120</div>
+                <ul class="features">
+                  <li>Trading guides &amp; tutorials</li>
+                  <li>More trading algorithms</li>
+                  <li>More crypto exchanges</li>
+                  <li>More crypto coins</li>
+                </ul>
+              </li>
+              <li style="cursor:pointer;" class="liparent">
+                <strong class="month">Aug. 2018</strong>
+                <span class="circle"></span>
+                <div class="price"><sup>$</sup> 160</div>
+                <ul class="features">
+                  <li>Trading guides &amp; tutorials</li>
+                  <li>More trading algorithms</li>
+                  <li>More crypto exchanges</li>
+                  <li>More crypto coins</li>
+                </ul>
+              </li>
+            </ul>
+
+            <div style="text-align: center; max-width: 400px; margin:30px auto;">
+              <p style="color:#8690ff">
+                <strong>Premium Membership</strong><br><br>
+                Membership comes at a monthly fixed price.<br>
+                The new price increases as time goes by.<br>
+                You only pay the initial price.
+              </p>
+            </div>
+
+          </div>
+        </div>
+        <div class="btn-holder">
+          <div class="container">
+            <a href="signup" class="btn-subscribe">Sign up</a>
+          </div>
+        </div>
+
+      </section>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>
