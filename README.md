@@ -214,10 +214,13 @@ deactivate # exit the virtual environment ; whenever no longer needed
 
 ### starter.py
 This script is used for starting long-term jobs on server B (Kafka, consumers and producers).
-To prompt starting modules run:
+To prompt (y/n) starting modules run:
 ```
 python starter.py f
 ```
+In our case we will answer y to every question.
+This will start the Kafka + Zookeeper processes ; the consumer (sentiment analysis) and producers (fb, tw, ...).
+
 To prompt stopping modules run:
 ```
 python starter.py close
