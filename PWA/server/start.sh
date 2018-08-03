@@ -1,5 +1,5 @@
 pm2 start server_dev.js --watch
-pm2 start server_live.js --watch
+pm2 start server_live.js # don't watch
 
 pm2 start operations/ops.js --watch
 
