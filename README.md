@@ -248,7 +248,7 @@ Each producer will write log files (info and error) which are located in the log
 When a producer crashes it may (or may not) write an additional log file with ".stderr.log" extension.
 If you are having trouble getting a producer to work, then manually debug it:
 - make sure the process is stopped: kill -9 $(ps aux | grep facebookProducer)
-- enter virtual end: . env.sh
+- enter virtual env.: . env.sh
 - run the producer: python producers/facebookProducer.py
 - debug using the output/errors.
 
