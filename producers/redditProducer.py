@@ -1,3 +1,11 @@
+
+# email: cryptopredicted@gmail.com
+# user: crypto_predicted
+# pass: fqe5r89f49esrqg8-*ser5g+serg
+# url: https://www.reddit.com/prefs/apps
+# client id: EzcegP77YYq7dg
+# client secret:	CwTogkSNVPGIJFiQdWyZF_Gqqr4
+
 import praw
 import json
 import nltk
