@@ -325,4 +325,4 @@ mongorestore --username "root" --password "......" --authenticationDatabase "adm
 ```
 6. Restart all producers, consumers and node workers.
 
-Note: depending on how quick you execute this process, you might experience data loss. So try to execute everything as quickly as possible to minimize its effects. It's also not clearly documented how mongorestore handles duplicate key exceptions, it "may" not even be necessary to shut down all modules prior to migrating the data.
+Note: depending on how quick you execute this process, you might experience data loss. So try to execute everything as quickly as possible to minimize its effects. It's also not clearly documented how mongorestore handles duplicate key exceptions, it "may" not even be necessary to shut down all modules (and/or dropping the database in step 4) prior to migrating the data.
