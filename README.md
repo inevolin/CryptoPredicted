@@ -201,6 +201,17 @@ There are various files which use the IP address of the server where MongoDB run
 - mongo_user.sh
 Note: use localhost or 127.0.0.1 instead of the public IP address if you know for certain whether the module(s) will run on the same server as the MongoDB instance.
 
+### Apache Kafka
+Kafka is a message broker, not a long-term database. It's a scalable framework for receiving/sending messages from producers to consumers. It does temporarily store its messages as log files, however the default settings are too aggressive for us.
+
+Edit the file "/etc/kafka/config/server.properties" and find the line which says "log.retention.hours". By default it's set to 168 hours, however, in our case we don't need it to store log files that long, because we process everything in an almost real-time fashion.
+
+So we are going to add a new line like this:
+```
+log.retention.minutes=5
+```
+For more information please refer to the official doc: https://kafka.apache.org/documentation/
+
 ### env.sh
 We are using virtual environments for Python, this is necessary for managing dependencies without altering the default Python installation.
 So whenever we run Python scripts, make sure you are inside a virtual environment like:
@@ -210,7 +221,7 @@ cd -P ~/cryptopredicted # navigate to the working directory
 (... doing python work ... )
 deactivate # exit the virtual environment ; whenever no longer needed
 ```
-
+Note: for all our modules we solely use Python 3.5.2 -- since we don't use any other version, we've changed added the alias "python" to execute "python3". So by using "python" command you are actually executing the version 3.5.2.
 
 ### starter.py
 This script is used for starting long-term jobs on server B (Kafka, consumers and producers).
@@ -229,3 +240,63 @@ To show modules:
 ```
 python starter.py
 ```
+
+#### producers
+The various producers are located in the producers/ directory (all having .py extension).
+Each producer will write log files (info and error) which are located in the logs/ directory.
+
+When a producer crashes it may (or may not) write an additional log file with ".stderr.log" extension.
+If you are having trouble getting a producer to work, then manually debug it:
+- make sure the process is stopped: kill -9 $(ps aux | grep facebookProducer)
+- enter virtual end: . env.sh
+- run the producer: python producers/facebookProducer.py
+- debug using the output/errors.
+
+Note: the exchangeProducer.py (for OHLCV data from Binance) does not publish to Kafka, but immediately inserts into the MongoDB database.
+
+#### consumer(s)
+Right now there is only one consumer, called consumerK. This consumer takes the live output of each producer and processes it in real-time.
+In the consumers/ directory there is an additional directory "tools" which cointains helpful scripts if you need to debug/analyze the Kafka stream.
+
+Debugging the consumer is done through a similar approach as the producers.
+
+### NodeJS
+For several reasons we use Nginx as an additional layer (to use php7). You could also refactor the code to remove Nginx and use NodeJS as sole web server. But for now just play along.
+
+On server A we are going to launch the necessary node workers.
+Navigate to PWA/server/ and run "start.sh".
+
+In our case we use the module "pm2" for running and managing our node workers. You can use commands such as "pm2 status" to see which node modules are running and which stopped/crashed. To debug you can run "pm2 logs" or "pm2 logs NAME_OF_NODE" to follow its info and error logs in real-time.
+
+Once you have started our node workers, we have to tell pm2 to remember these -- so whenever the server is restarted (for whatever reason) it will automatically re-start our node workers. To do this run the "save.sh" script.
+
+### Crontab: A.I. predictions
+On server B we have to enable our A.I. predictions which are updated/generated every two minutes using a Python script.
+Use the command "crontab -e" to open an editor, and at the end of the file add the following two lines:
+```
+# predictions v1
+*/2 * * * * /home/cryptopredicted/ENV/bin/python3 /home/cryptopredicted/predictors/predictions_v1.py 10
+*/2 * * * * /home/cryptopredicted/ENV/bin/python3 /home/cryptopredicted/predictors/predictions_v1.py 60
+```
+As you can see, every two minutes (*/2) two cron jobs will be started of the same file (predictions_v1.py) with different parameters (10 and 60 : referring to minutes). 
+
+### Crontab: status.py
+For the system admin there's an extra feature (highly recommended) which will attempt notifying you (in most cases) when a certain module is offline/crashed. 
+Add the following line into crontab:
+```
+# notifying offline modules by mail
+*/20 * * * * /home/cryptopredicted/ENV/bin/python3 /home/cryptopredicted/status.py liveness mailer
+```
+This status.py script is run every twenty minutes to check for offline modules -- and if any is offline for odd amount of time then an email will be sent. Make sure to have a look inside status.py to see/edit the thresholds for various components. But also change the admin's email address in "smtp.py", more specifically the "TO" variable; which is an array that contains one (or more) emails.
+
+### Email configuration
+Some modules will need SMTP access to send emails to the end-user(s) and/or the system admin.
+By default it uses a regular Gmail account: cryptopredicted@gmail.com and uses its plain text password for auth.
+If you need to change the account then do so in the following files:
+- PWA/server/mail/index.js
+- smtp.py
+
+Note: regular Gmail accounts have a daily smtp sending limit. It's more recommended to use a Gsuite (paid Gmail) account which has much higher smtp sending limits.
+If you use Google's service make sure to enable less secure apps - https://www.google.com/settings/security/lesssecureapps but also disable Captcha temporarily so you can connect - https://accounts.google.com/b/0/displayunlockcaptcha .
+
+
