@@ -13,6 +13,7 @@ Server B (which runs the A.I. computations) is very resource intensive, thus the
 Server A is the web server, thus it also requires CPU and RAM, depending on your traffic volume, and/or any additional computations.
 
 Both servers must be Ubuntu v16 -- any other Linux distribution or version hasn't been tested, use it at your own risk.
+Make sure Python 2.7 and Python 3.5.2 are installed and working.
 
 ### Basics
 Make sure you are logged in as root throughout the entire setup.
@@ -162,3 +163,66 @@ include /etc/nginx/sites-enabled/*;
 Make sure Nginx is not throwing any errors by executing "nginx -t" it should say all is successful.
 And then run "service nginx restart" to restart the web server (which should execute without any output/error).
 
+### MongoDB
+
+Run the following commands to create two MongoDB users:
+```
+mongo
+use admin
+db.createUser({user:"root",pwd:"1561_AEI_qzef26_GRZ_ez65",roles:[{ role: "root", db: "admin" }]})
+use crypto
+db.createUser({user:"cryptopredicted",pwd:"1561_AEI_qzef26_GRZ_ez65_fezo_fze6",roles:[{ role: "readWrite", db: "crypto" }]})
+```
+The first user is root and can do everything (feel free to change its password).
+The second user is "public", whereby we can use its credentials to connect and authenticate with the "crypto" database from anywhere in the world. So make sure its password is pretty darn secure.
+
+Let's configure MongoDB to make it available from the outside and add required secure authentication.
+Edit the "/etc/mongod.conf" file.
+
+First, find the "net:" line and add your server A's public IP to the bindIp line:
+```
+net:
+  port: 27017
+  bindIp: localhost,159.69.94.65
+```
+
+Find the "security:" line and add authorization ; or add it manually:
+```
+security:
+  authorization: 'enabled'
+```
+
+Now restart MongoDB by running "service mongod restart" -- it should restart fine without throwing any errors.
+To test the connection to the database use the "./mongo_user.sh" script, which should allow you to connect from any server. You can also use the "./mongo_admin.sh" script on server A to login as user (this will only print commands which you need to execute manually).
+
+There are various files which use the IP address of the server where MongoDB runs. So make sure to edit the following files and change the IP address to that of your server A:
+- PWA/server/db.js
+- DAL.py
+- mongo_user.sh
+Note: use localhost or 127.0.0.1 instead of the public IP address if you know for certain whether the module(s) will run on the same server as the MongoDB instance.
+
+### env.sh
+We are using virtual environments for Python, this is necessary for managing dependencies without altering the default Python installation.
+So whenever we run Python scripts, make sure you are inside a virtual environment like:
+```
+cd -P ~/cryptopredicted # navigate to the working directory
+. env.sh # enter the virtual environment ; only once
+(... doing python work ... )
+deactivate # exit the virtual environment ; whenever no longer needed
+```
+
+
+### starter.py
+This script is used for starting long-term jobs on server B (Kafka, consumers and producers).
+To prompt starting modules run:
+```
+python starter.py f
+```
+To prompt stopping modules run:
+```
+python starter.py close
+```
+To show modules:
+```
+python starter.py
+```
