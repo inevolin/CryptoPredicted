@@ -59,13 +59,13 @@ def phone_code_callback():
 
 log.info("trying to connect...")
 client = Client(
-	#session_name="/home/cryptopredicted/producers/cryptopredicted",
-    #api_id=224334,
-    #api_hash="820e1291cb0d8ef7455b3da30a4f3438",
+	 session_name="/home/cryptopredicted/producers/cryptopredicted",
+     api_id=224334,
+     api_hash="820e1291cb0d8ef7455b3da30a4f3438",
 
-    session_name="/home/cryptopredicted/producers/cryptopredicted_vanja",
-    api_id=317029,
-    api_hash="88e30a2ddffd981c5ff7a58aa8871ca2",
+     #session_name="/home/cryptopredicted/producers/cryptopredicted_vanja",
+     #api_id=317029,
+     #api_hash="88e30a2ddffd981c5ff7a58aa8871ca2",
 )
 log.info("logged in")
 print("logged in")

@@ -45,7 +45,7 @@ def process():
 			ret = graph.batch(post_arr)
 			for entries in ret:
 				try:
-					log.info(entries)
+					log.info(entries) 
 					for obj in entries['data']:
 						body = ''
 						link = obj['link'] if 'link' in obj else ''
