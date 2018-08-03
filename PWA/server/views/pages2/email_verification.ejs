@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Email verification</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+
+        <ul class="steps" style="padding-top:30px;">
+          <li></li>
+          <li class="active"></li>
+        </ul>
+
+        <div class="sub-container">
+          
+          <!-- profile-area -->
+          <div class="profile-area" style="padding:50px;">
+            <% if (typeof msg !== 'undefined') { %>
+              <strong><%= msg %></strong><br><br>
+            <% } else { %>
+              <strong>You're almost done</strong><br><br>
+              <p>We require you to verify your email address. We have sent you an email to <u><%= email %></u> containing a verification link. Please click or visit that link to complete the registration. Thank you!</p>
+              <p>If you do not receive the verification email within 5 minutes, please check your spam inbox. Alternatively you can resend the email by <a href="?resend=1" style="font-weight: bold; color:white;">clicking here</a>.</p>
+            <% } %>
+
+            <p>Are you experiencing an issue? Please <a href="support" style="font-weight: bold; color:white;">reach out to us</a>, we'll help you out immediately.</p>
+            
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>

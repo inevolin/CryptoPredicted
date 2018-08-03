@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <style>
+    .form-control:disabled, .form-control[readonly] {
+      background-color: #111da5;
+    }
+  </style>
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/dashboard');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Profile</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+        <div class="sub-container">
+          
+          <!-- profile-area -->
+          <div class="profile-area">
+            <strong class="title">Personal Info</strong>
+            <form class="form" action="profile" method="POST">
+              <div class="form-group name input-focused">
+                <label for="rel01">name</label>
+                <input class="form-control" type="text" id="rel01" name="name" value="<%= name %>">
+              </div>
+              <div class="form-group email input-focused">
+                <label for="rel02">Email</label>
+                <input class="form-control" type="email" id="rel02" value="<%= email %>" readonly>
+              </div>
+            
+              <strong class="title" style="margin-top:40px;">Update Pasword</strong>
+            
+              <div class="form-group password input-focused">
+                <input class="form-control" type="password" id="rel03" name="password" placeholder="current password" <% if (typeof pass !== 'undefined') { %> value="<%= pass %>" <% } %> >
+              </div>
+              <div class="form-group password input-focused">
+                <input class="form-control" type="password" id="rel04" name="newpassword" placeholder="new password" <% if (typeof newpass !== 'undefined') { %> value="<%= newpass %>" <% } %> >
+              </div>
+
+              <div class="form-group">
+                <span style="color: white; font-weight: 1000;"> <% if (typeof err !== 'undefined') { %> <%= "Error: " + err %> <% } %> </span>
+              </div>
+
+              <button type="submit" class="btn-update" style="border:none;margin-top:40px;cursor:pointer;">update</button>
+
+
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>

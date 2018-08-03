@@ -1,0 +1,63 @@
+
+
+
+<!-- 
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/main.css">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+<script>window.jQuery || document.write('<script src="js/jquery-3.2.1.min.js" ><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous" ></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous" ></script>
+
+<script src="js/jquery.main.js" ></script>
+ -->
+
+
+<style>
+  <%- include('/home/cryptopredicted/PWA/server/views/public2/css/bootstrap.min.css') %>
+</style>
+<style>
+  <%- include('/home/cryptopredicted/PWA/server/views/public2/css/main.css') %>
+</style>
+
+<script>
+  <%- include('/home/cryptopredicted/PWA/server/views/public2/js/jquery-3.2.1.min.js') %>
+</script>
+<script>
+  <%- include('/home/cryptopredicted/PWA/server/views/public2/js/popper.min.js') %>
+</script>
+<script>
+  <%- include('/home/cryptopredicted/PWA/server/views/public2/js/bootstrap.min.js') %>
+</script>
+<script>
+  <%- include('/home/cryptopredicted/PWA/server/views/public2/js/jquery.main.js') %>
+</script>
+
+
+
+<script>
+	function cp_backButton(href) {
+	  if (document.referrer.length > 0 && document.referrer.indexOf('cryptopredicted.com') != -1) {
+	    window.history.back();
+	    //window.history.go(-1);
+	  } else {
+	    window.location.pathname = href;
+	  }
+	  return false;
+	}
+</script>
+
+
+<!-- Hotjar Tracking Code for cryptopredicted.com -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:907304,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>

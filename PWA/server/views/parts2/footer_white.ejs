@@ -1,0 +1,53 @@
+<footer id="footer">
+  <div class="container">
+    <!-- icons list -->
+    <ul class="icons-list">
+      <li style="height: 32px">
+        <a class="icon-home footericon" href="/" style="color:#111da5;"></a>
+        <span style="display: none; font-size:16px;color:#111da5;">
+          <a style="font-size:16px;color:#111da5;" href="/" target='_blank'>Homepage</a>
+        </span>
+      </li>
+      <li style="height: 32px">
+        <a class="icon-smile footericon" style="color:#111da5;"></a>
+        <span style="display: none; font-size:16px;color:#111da5;">Have a great day!</span>
+      </li>
+      <li style="height: 32px">
+        <a class="icon-mail footericon" style="color:#111da5;"></a>
+        <span style="display: none; font-size:16px;color:#111da5;">
+          <a style="font-size:16px;color:#111da5;" href="mailto:support@cryptopredicted.com">support@cryptopredicted.com</a>
+        </span>
+      </li>
+      <li style="height: 32px">
+        <a class="icon-list footericon" style="color:#111da5;"></a>
+        <span style="display: none; font-size:16px;color:#111da5;">
+          <a style="font-size:16px;color:#111da5;" href="https://medium.com/@cryptopredicted" target='_blank'>Blog</a>
+        </span>
+      </li>
+      <li style="height: 32px">
+        <a class="icon-pin footericon" style="color:#111da5;"></a>
+        <span style="display: none; font-size:16px;color:#111da5;">New York City</span>
+      </li>
+    </ul>
+    <p style="color:#111da5;">Made in Ny with Love &copy; 2017-2018 cryptopredicted</p>
+    <!-- footer logo-->
+    <strong class="logo"><a><img src="images/logo-ny.png" alt="Made in NY"></a></strong>
+  </div>
+  <script>
+    $("#footer li").on({
+        mouseenter: function (e) {
+          $(e.currentTarget).find('span').show();
+          $(e.currentTarget).find('.footericon').hide();
+        }
+    });
+    $("#footer li").on({
+        mouseleave: function (e) {
+          console.log(e)
+          $(e.currentTarget).find('span').hide();
+          $(e.currentTarget).find('.footericon').show();
+        }
+    });
+
+
+  </script>
+</footer>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CryptoPredicted</title>
+  
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/head') %>
+  <%- include('/home/cryptopredicted/PWA/server/views/parts2/header_scripts') %>
+
+  <style>
+    .terms-area p {
+      color: #f8f8f8;
+    }
+    .terms-area p  a {
+      color: #f8f8f8;
+      font-weight: bold;
+    }
+  </style>
+
+
+</head>
+<body class="inner">
+  <!-- main container of all the page elements -->
+  <div id="wrapper">
+    <!-- header of the page -->
+    <header id="header">
+      <div class="container">
+        <div class="inner-container">
+          <a href="#" onclick="cp_backButton('/');return false;" class="btn-back"><span class="icon-arrow2"></span></a>
+          <strong class="title">Terms &amp; conditions</strong>
+        </div>
+      </div>
+    </header>
+    <!-- contain main informative part of the site -->
+    <main id="main">
+      <div class="container">
+        <div class="sub-container">
+
+          <!-- terms-area -->
+          <div class="terms-area">
+            <div class="col">
+
+              <p>By using any of our products, services, content and material you automatically agree to these terms and conditions, including our <a href="privacy">privacy policy</a>. </p>
+
+              <p>We reserve the authority to change any of our content, including these terms and conditions as we please and without any prior notice. Including the change of prices and payment methods and payment conditions without prior notice, however as respectful human beings we will notify you whenever necessary. </p>
+
+              <p>We guarantee a 30-day period where you can request a refund, unless stated otherwise on the sales page. You must submit a reason for a refund, invalid reasons will be declined and no refund will be issued. Invalid reasons are such as "I do not like the product". We simply have trial versions for all our products & services, the user should've used the trial before making a purchase. If the product does not work or it was a wrong purchase, we will issue a refund. However if the buyer has passed the 30-day period, no reason will satisfy. </p>
+
+              <p>For products purchased using a subscription plan (monthly payments / recurring payments) become excluded from a refund if more than 30 days have passed since the first subscription date. If for instance a person has purchased the product (subscriber) on the 1st of September, he may request and receive a refund until the 30th of September; on the 1st of October he will be issued the monthly fee for using the product and will not receive a refund (if he/she may ask for one) for that term. That person is solely responsible for canceling their subscriptions, which can be easily done through their payment processor, which in most cases this is their PayPal or Stripe account. Users may also request us to cancel the subscription on their behalf.</p>
+
+            </div>
+            <div class="col">
+
+              <p>One may cancel their subscription at any given time without additional fees/costs. The product will stay active (unless explicitly stated otherwise) until the end of the term. In case the user wishes to re-enable their subscription they must place a new order. </p>
+
+              <p>Our products and services are specifically designed for the cryptocurrency industry. We provide aggregated and processed data in the form of price forecasts/predictions and trading signals. We are not held responsible for any of your financial success and/or losses because of our services and products. Using our products and services for investing and/or trading comes with risks, it is thus your risk and we are not held responsible for any outcomes whatsoever. </p>
+
+              <p>We reserve the rights to suspend your account if we notice some kind of abuse of our products/services in any shape or form. Depending on our goodwill you may no longer be eligible for a refund upon suspension. In severe cases we will take legal actions against criminal activities performed through our services/products or involving them.</p>
+              
+              <p>This page has been last updated on: May 15, 2018 </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+    <!-- footer of the page -->
+    <%- include('/home/cryptopredicted/PWA/server/views/parts2/footer_white') %>
+  </div>
+</body>
+</html>
