@@ -21,3 +21,4 @@ predictors/RL/models/
 **/nohup.out
 nohup.out
 PWA/server/node_modules/*
+backtest/algos/chart.html
