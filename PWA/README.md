@@ -44,7 +44,7 @@ The above obtains:
 - news sentiments, idem dito but for news channels
 You also see that in this case we will data from exchange=binance (the only exchange currently in our database)
 The above returns a JSON array with objects that look like this:
-![](https://i.imgur.com/vXltBq1.png)
+![](https://i.imgur.com/EXCKm4g.png)
 
 Note: not every object will have all the fields, in case they are missing these fields will not be included. So when writing code that parses these objects make sure to verify and check if the field you're accessing really exists on the object.
 
