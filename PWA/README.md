@@ -31,6 +31,23 @@ Whenever you add a new strategy into "algos.js", make sure to set the "FIRST_RUN
 This contains functions for MongoDB access and (private) API calls to access the data.
 The specific endpoint URLs are found in the "index.js" file.
 
+The API is primarily used by different components, such as the AI system, trade algorithms and more.
+It's important to illustrate how to access and use it to get price data and sentiments.
+
+Given the following URL which access our API:
+https://cryptopredicted.com/PWA/api/?type=exchange,socialMentions,newsMentions,socialSentiments,newsSentiments&exchange=binance&base_cur=BTC&quote_cur=USDT&interval=60&historymins=2880&currentDateTime=2018-08-04T11:08
+The above obtains:
+- exchange data (OHLC and Volume data)
+- social mentions, aggregated totals of social platforms which mentioned the base currency = {BTC, btc, bitcoin, ...}
+- news mentions, idem dito but for news channels
+- social sentiments, sentiment analysis for social channels which mentioned the base currency
+- news sentiments, idem dito but for news channels
+You also see that in this case we will data from exchange=binance (the only exchange currently in our database)
+The above returns a JSON array with objects that look like this:
+![](https://i.imgur.com/vXltBq1.png)
+
+Note: not every object will have all the fields, in case they are missing these fields will not be included. So when writing code that parses these objects make sure to verify and check if the field you're accessing really exists on the object.
+
 ## mail/
 This contains smtp/email specific code, and email templates, used for notifying the users by email (new user, password reset, signals, ...).
 
