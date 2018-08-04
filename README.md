@@ -292,6 +292,10 @@ Use the command "crontab -e" to open an editor, and at the end of the file add t
 ```
 As you can see, every two minutes (*/2) two cron jobs will be started of the same file (predictions_v1.py) with different parameters (10 and 60 : referring to minutes). 
 
+This is a dangerous system, because it can make your server crash. Lets say we run these cron jobs every 10 seconds, and given the fact that each one needs 30 seconds to finish, then the system will be overloaded with processes which start but never finish -- thus the server will crash/stall. Solving this is tricky and requires careful engineering. Make sure that each job has enough time to finish executing before a new one is started. Usually one minute per job is enough, with an additional one minute margin just in case (summing up to two minutes per job).
+
+So if you decide to add more input data into the A.I. system, make the models more complex (deeper & more layers), or adding more cryptocurrencies -- keep in mind that this might reduce performance and increase execution time. As a result you may enter dangerous territory, so always have a plan B.
+
 ### Crontab: status.py
 For the system admin there's an extra feature (highly recommended) which will attempt notifying you (in most cases) when a certain module is offline/crashed. 
 Add the following line into crontab:
