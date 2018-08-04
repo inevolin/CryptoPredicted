@@ -1,4 +1,4 @@
-# cryptoproto-backtests
+# Backtesting trading algos
 
 The purpose of this repo is to invent and back test novel trading strategies/algorithms. It's recommended to use an UI-based OS (e.g. Windows) in combination with Canopy or a similar Python IDE (I use SublimeText 3 with anaconda plugin)
 
