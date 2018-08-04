@@ -84,7 +84,7 @@ MongoClient.connect(dbCfg.url, dbCfg.settings, (err, database) => {
 
 function render404(req, res) {
 	res.status(404);
-	res.render('pages/404', {req:req}, function(err, html) {
+	res.render('pages2/404', {req:req}, function(err, html) {
 		if (err) {
 			 console.log(err);
 			res.send("Error 404: The page you tried to access does not exist.")
@@ -95,7 +95,7 @@ function render404(req, res) {
 }
 function render500(req, res) {
 	res.status(500);
-	res.render('pages/500', {req:req}, function(err, html) {
+	res.render('pages2/500', {req:req}, function(err, html) {
 		if (err) {
 			 console.log(err);
 			res.send("Error 500: Interval server error.")
