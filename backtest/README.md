@@ -25,3 +25,15 @@ Once you have opened one of the available algorithms then try running it. When i
 Plotly has many useful tools which you can use, such as zoom-in, pan, etc... when you scroll over the y-axis you will shrink it in the Y-direction (similar for X-axis). For more cool features visit Plotly's Python website.
 
 Notice: on the image above there is a debug=1 variable. This is usually used for when you would like to debug/visualize your strategy and portfolio. When you disable debugging (debug=0) then you're usually about to simulate many (hundreds) of ROI calculations (if necessary that is).
+
+## Using SublimeText(v3)
+If you're Sublime fanatic like me, then follow along.
+1. First install the Anaconda (conda) plugin for SublimeText which allows you to manage environments and more (Google the install instructions).
+2. Once you've done that, make sure you already have an anaconda environment with the Plotly library installed (and its dependencies).
+3. Open some algorithm in Sublime, then hit Ctrl+Shift+P to open the actions menu, and type in "conda: activate environment" and hit enter.
+![](https://i.imgur.com/twCWFwZ.png)
+4. Select your environment (it's called tensorflow in my case).
+![](https://i.imgur.com/1DOgN4l.png)
+5. Finally you are ready to run the script, doing so by pressing ctrl+b . Once it's finished (and depending on the script) it may open a chart with the Buy/Sell signals and more.
+![](https://i.imgur.com/nGSaUl0.png)
+
