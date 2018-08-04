@@ -260,6 +260,19 @@ In the consumers/ directory there is an additional directory "tools" which coint
 
 Debugging the consumer is done through a similar approach as the producers.
 
+#### mysettings.py
+This file is very important and is used by most of the python scripts.
+It contains several functions for logging and dates, but more importantly many static variables.
+
+It has a mapping of crypto acronyms to real-life names. For instance, we want to associate BTC with all names people give to Bitcoin, which are: BTC, btc, btc#, bitcoin and #bitcoin. These phrases/words are used on social media, and they specify whether the conent/context is associated with BTC.
+
+This associated is a type of standardization and an important component of the entire system.
+
+We also specify the tweets, groups and channels for various producers to scrape from (facebook, reddit, twitter, ...), each again mapped by the crypto acronym (e.g. BTC).
+We also specify a list of news websites/channels for the news producer.
+
+You'll also find some deprecated variables such as "CRYPTO_currencyProducer" and "SITES_forumProducer" which are no longer used, and were part of deleted components.
+
 ### NodeJS
 For several reasons we use Nginx as an additional layer (to use php7). You could also refactor the code to remove Nginx and use NodeJS as sole web server. But for now just play along.
 
