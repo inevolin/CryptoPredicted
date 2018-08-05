@@ -1,4 +1,5 @@
 
+// various operations
 
 const MongoClient   = require('mongodb').MongoClient;
 const dbCfg         = require('../db.js');
@@ -17,6 +18,7 @@ MongoClient.connect(dbCfg.url, dbCfg.settings, async (err, database) => {
 	notifyExpiredTrialUsers(cryptoDB)
 });
 
+// notify uses when their trial period expired:
 function notifyExpiredTrialUsers(cryptoDB) {
 	schedule.scheduleJob('0 * * * * *', async function() {
 		step1();

@@ -1,3 +1,10 @@
+
+# used by sentiment analysis
+# This DICT has been merged with various dictionaries found online, so it not solely relies on a single source.
+
+# A possible improvement would be to give positive & negative weights.
+# E.g.: the words  "bad" and "terrible" are both 'negative', but one is worse than the other.
+
 # source: https://www3.nd.edu/~mcdonald/Word_Lists.html
 DICT = {
 

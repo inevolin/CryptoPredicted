@@ -11,10 +11,6 @@ import core
 
 def run(debug):
 
-    # this strategy works best at 1hr intervals
-    # 1. the idea is based on calculating the slope of the current price (which is a random price at interval 't') against the previous close price.
-    # 2. it also makes sure a buy occurs when the current price is higher than the previous one
-    # 3. 
 
     base = "BTC"
     #base = "ETH"

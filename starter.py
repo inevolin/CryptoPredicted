@@ -1,3 +1,6 @@
+
+# starter script which allows us to launch long-term running Python jobs: producers, consumer, kafka+zookeeper
+
 import subprocess
 import sys
 import os, signal

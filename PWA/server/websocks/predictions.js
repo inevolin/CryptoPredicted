@@ -1,4 +1,7 @@
 
+
+// sending predictions to users
+
 module.exports = function(io, cryptoDB, auth, payments) {
 
 
@@ -38,7 +41,7 @@ module.exports = function(io, cryptoDB, auth, payments) {
 	    	});
 		});
 
-
+	    // consuler is used when user clicks prev/next to "consult" historical predictions.
 		socket.on('consult', function(roomObj) {
 	    	console.log("socketIO: sesID: "+roomObj.sessionID)
 	    	auth.authenticate(roomObj.sessionID, function(user) {
@@ -90,6 +93,7 @@ module.exports = function(io, cryptoDB, auth, payments) {
 	}
 
 
+	// periodicially refresh predictions & push them to all subscribed users
 	function periodic() {
 		for (var room in rooms) {
 			var client_room = room;
@@ -147,6 +151,9 @@ module.exports = function(io, cryptoDB, auth, payments) {
 	}
 
 	function __anchorPredictionsToPrice(docs_price, docs_predic) {
+		// ANCHORING:
+		// the absolute value of the predictions can be "offset" from the real price data, so we anchor first prediction entry to the last price entry.
+		// it's more important to see a trend in the predictions rather than their absolute and real value.
 		try {
 			//return docs_predic.avg = new Object();
 
@@ -290,6 +297,9 @@ module.exports = function(io, cryptoDB, auth, payments) {
 
 
 	var _eval_productionPredictions = (async() => {
+		// evalution function for measuring accuracy of predictions
+		// experimental function, use it with care.
+
 		// we shall not compute pct% accuracy, because it's usually +99% with a low stdv.
 		// for BTC the predictions vary on average 0 to $50 from the real price
 		// instead we should persuit generating BuySell signals and displaying its 24h ROI

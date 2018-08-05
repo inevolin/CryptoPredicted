@@ -1,3 +1,9 @@
+
+# evaluation function to determine accuracy
+# many techniques were tried, including RMSE and similar; this one uses DTW algorithm.
+# however this file should no longer be used, because it may no longer be compatible with the API.
+# you can however refactor it if you wish to make it compatible again with our new data format and new API.
+
 import json
 import urllib.request
 from datetime import datetime, timedelta

@@ -1,3 +1,7 @@
+
+# DAL: Data Access Layer
+# This file is used by various Python scripts to access the database (insert, read, update, remove)
+
 import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId

@@ -1,4 +1,5 @@
 
+# SMTP configuration for sending email from the server (to the sys admin).
 
 def send_email_server(subject, body):
     import smtplib

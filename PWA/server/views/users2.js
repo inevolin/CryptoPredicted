@@ -1,4 +1,5 @@
 
+// all about the users
 
 module.exports = function(app, auth, root_node, payments) {
 

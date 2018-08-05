@@ -1,3 +1,8 @@
+
+# Settings/configurations and common functions used by various Python scripts.
+# *) Kafka endpoint URI, authentication and topics
+# *) Keywords used by twitter producer, reddit; facebook pages; and news urls.
+
 import sys
 import os
 import traceback

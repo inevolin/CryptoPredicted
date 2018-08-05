@@ -1,4 +1,6 @@
 
+// telegram bot related functions and used on trade signals page (for enabled/disabling telegram notifications for specific strategies)
+
 module.exports = function(cryptoDB) {
 
     var module = {};

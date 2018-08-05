@@ -1,4 +1,6 @@
 
+// web sockets to send "trade signals" data to users.
+
 module.exports = function(io, cryptoDB, auth, payments) {
 
 	var functions = require('../api/functions.js')
@@ -83,9 +85,20 @@ module.exports = function(io, cryptoDB, auth, payments) {
 
 
 	var obtain_Singleportfolio = async function(id) {
+		// when user clicks the blue "+" to open the chart with Buy/Sell signals, send it to them.
+		// fortunately we stored the portfolios from our ROI computation phase ( iin server/algos/ROIs.js ), so we can just re-use it here ;))
+
 		var docs = [];
 		await process_algo_singlePortfolio(cryptoDB, docs, id);
 
+		
+		// if you need to pre-process the data before showing it to the user:
+		// eg to reduce the amount of data.
+		// this could be interesting when user is on a mobile phone with a smaller screen size
+		// so we don't want to send them a very large JSON file , which could crash their mobile browser lol.
+		// however, we assume they can handle it (for now).
+
+		
 		/*for (var i in docs) {
 			var doc = docs[i]
 			

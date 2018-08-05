@@ -1,3 +1,8 @@
+
+# Artificial Intelligence (A.I.) price predictions
+
+# this script uses tensorflow/Keras libraries, make sure they are installed properly.
+
 import matplotlib
 matplotlib.use('Agg')
 import os, errno
@@ -130,7 +135,8 @@ def make_train_predictions(scalers, train_X, n_features, n_window, model, seq_pr
 def make_future_predictions(scalers, train, n_window, n_features, predict_n_intervals, model, seq_pred_len):
     # !ici
     #########################################
-    # here we predict value the future
+    # here we predict future values (predictions)
+    # notice that we create multiple predictions by using the latest prediction as new input data (shifting the input values)
 
     xpolated = [()] * len(scalers)
 
@@ -180,6 +186,7 @@ def f_historymins(interval, n_window, multiplier):
     return interval*(n_window+1)*multiplier
 
 def obtainDataset(exchange ,symbol, interval, historymins, currentDateTime, dataset_func, sync_dict_json):
+    # get data from our API and process it given our dataset_func
     jsout = getJson(exchange, symbol['base_cur'], symbol['quote_cur'], interval, historymins, currentDateTime, sync_dict_json)
     try:
         dataset = dataset_func(jsout, symbol)
@@ -201,10 +208,13 @@ def obtainDataset(exchange ,symbol, interval, historymins, currentDateTime, data
     return dataset
 
 def fitAndPredict_trainAlways(h5fn, featuresID, exchange, symbol, n_window, interval, currentDateTime, predict_n_intervals, n_neuron, n_hiddenlay, n_epoch, n_batch_size, dataset_func,  sync_dict_json, sync_list_output, seq_pred_len):
+    # this is the core A.I. training and predictions part.
+
     import random
     from keras import backend as K
     from keras.callbacks import EarlyStopping
     try:
+        # if no model exists: prepare data, create model, train it, save it and clear it.
         if not modelExists(h5fn):
             historymins = f_historymins(interval, n_window, 70) # 1000
             dataset = obtainDataset(exchange ,symbol, interval, historymins, currentDateTime - timedelta(minutes=interval-1), dataset_func, sync_dict_json)
@@ -221,6 +231,9 @@ def fitAndPredict_trainAlways(h5fn, featuresID, exchange, symbol, n_window, inte
             K.clear_session()
             del model
 
+        # by now a model (already) exists; so we prepare data, load model, train it, make predictions and save the new weights.
+        # notice that it's also possible to train the model once (step above), and then omit the "model.fit(...)" function, whereby we don't re-train the model each new generation.
+        # if you omit continuous training, you will increase performance, but whether you accuracy is retained (through time) is not documented.
 
         # let us train once, and then just load model
         historymins = f_historymins(interval, n_window, 3)
@@ -228,21 +241,13 @@ def fitAndPredict_trainAlways(h5fn, featuresID, exchange, symbol, n_window, inte
         n_features = len(dataset[0])
         (train, train_X, train_y, scalers) = prepare_trainingset(dataset, n_features, n_window, seq_pred_len)
 
-        # print("loading model: " + h5fn)
-        # model = loadModelAndWeights(h5fn)
-        # early_stopping_monitor = EarlyStopping(monitor='loss', patience=50, verbose=1)
-        # history = model.fit(train_X, train_y, epochs=n_epoch, batch_size=n_batch_size,  verbose=1, shuffle=False, callbacks=[early_stopping_monitor]) # validation_data=(test_X, test_y),
-        # saveWeights(h5fn, model)
-        # K.clear_session()
-        # del model
-
         model = loadModelAndWeights(h5fn)
         early_stopping_monitor = EarlyStopping(monitor='loss', patience=20, verbose=1)
         history = model.fit(train_X, train_y, epochs=n_epoch, batch_size=n_batch_size,  verbose=1, shuffle=False, callbacks=[early_stopping_monitor]) # validation_data=(test_X, test_y),
         saveWeights(h5fn, model)
         xpolated = make_future_predictions(scalers, train, n_window, n_features, predict_n_intervals, model, seq_pred_len)
         
-
+        # let's prepare data to be stored into the database:
 
         currentDateTime = adjustDatetime(interval, currentDateTime)# we use real-time datetime to make predictions, but when we persist we'll floor the datetime according to the interval
         tmpdt = currentDateTime + timedelta(minutes=interval)
@@ -280,6 +285,8 @@ def fitAndPredict_trainAlways(h5fn, featuresID, exchange, symbol, n_window, inte
         K.clear_session()
         del model
 
+        # instead of writing each prediction individually, we use another shared dict variable, which we process at the very end.
+        # this was implemented for several reasons (we want all predictions to be updated/stored at the same time, and not with a minute delay).
         # DAL.store_predictions_v1(DAL.openConnection(), sendobj)
         sync_list_output.append(sendobj)
 
@@ -293,6 +300,8 @@ def fitAndPredict_trainAlways(h5fn, featuresID, exchange, symbol, n_window, inte
         logErr.critical(str(ex), exc_info=True)
 
 def getJson(exchange, base_cur, quote_cur, interval, historymins, currentDateTime, sync_dict_json):
+    # getting data from our API (OHLC, volume, sentiments, ...) depending on the type parameter in query.
+
     # url = 'https://cryptopredicted.com/api.php?type=exchangeChart&exchange='+exchange+'&base_cur='+base_cur+'&quote_cur='+quote_cur+'&historymins='+str(historymins)+'&currentDateTime='+dtToString(currentDateTime)+'&interval='+str(interval)
     url = 'https://cryptopredicted.com/PWA/api/?type=exchange&exchange='+exchange+'&base_cur='+base_cur+'&quote_cur='+quote_cur+'&interval='+str(interval)+'&historymins='+str(historymins)+'&currentDateTime=' + dtToString(currentDateTime)
     
@@ -307,6 +316,9 @@ def getJson(exchange, base_cur, quote_cur, interval, historymins, currentDateTim
         if i*4 > 60: # wait 60seconds for the json (from other process), if it fails then force proceed yourself
             force = True
 
+    # sync_dict_json is a dictionary shared among the other processes
+    # it prevents making the same calls to the API, if the results are already obtained by some other process
+    # we don't want to make unnecessary API calls, one is enough given the same parameters.
     if force or not url in sync_dict_json:
         print(url)
         sync_dict_json[url] = 0
@@ -323,6 +335,7 @@ def moving_average(a, n=3) :
     return ret[n - 1:] / n
 
 def func_ai_a(js, symbol):
+    # preparing data to be trained, servers as input to the Neural Net (NN)
 
     dataset = [] #[()] * len(js)
     i=0
@@ -352,6 +365,9 @@ def func_ai_a(js, symbol):
 
 
 def func_ai_b(js, symbol):
+    # another type of input format, whereby we also make it predict buy/sell positions.
+    # this is highly experimental and yielded bad results
+    # but it may illustrate how such a thing is done in caee you need to extend your own version.
 
     dataset = [] #[()] * len(js)
     i=0
@@ -376,6 +392,7 @@ def func_ai_b(js, symbol):
             #logErr.critical(js[key])
             # raise
 
+    # in this 
     L = len(dataset)
     Lentry = len(dataset[0])
     for i, x in enumerate(dataset):
@@ -454,7 +471,7 @@ def createModel(h5fn, n_neuron, n_hiddenlay, n_features, n_window, seq_pred_len)
         model.add(LSTM(5, return_sequences=True,  ))
         model.add(Dropout(0.2))
 
-    if n_hiddenlay == 1:
+    if n_hiddenlay == 1: # default: recommended single layer with multiple neurons
         model.add(LSTM(5, return_sequences=True,  input_shape=(n_features, n_window)))
         model.add(Dropout(0.2))
     
@@ -468,6 +485,7 @@ def createModel(h5fn, n_neuron, n_hiddenlay, n_features, n_window, seq_pred_len)
     return model
 
 def adjustDatetime(interval, currentDateTime):
+    # if the datetime is not rounded to the given interval parameter, we'll do it here.
     if interval <= 60:
         return currentDateTime.replace(minute=currentDateTime.minute-(currentDateTime.minute % interval), second=0, microsecond=0) #"2018-01-26T12:00"
     else: 
@@ -477,6 +495,16 @@ def adjustDatetime_realtime(interval, currentDateTime):
     return currentDateTime
 
 def train_predict(args = sys.argv):
+
+    # we need to generate every possible combination of our configuration, let's pre-process it.
+    # we basically create and store tuples in an array.
+    # the array will be processed in a multi-processing fashion.
+    # we don't want to parallellize every possible combination, 
+    # but instead we want to have max 6 to 9 processes running at the same time.
+    # that's why at the deepest level we have a "uid" which acts as separator.
+
+    # this is an important part, because if you have many different combinations you want to try out (e.g. different epochs and neuron counts),
+    # then you want to make sure the processes don't take too long or make the server crash due to too many processes (or memory consumption).
 
     for HH in range(HH_max):
         for exchange in sorted(exchanges):
@@ -498,6 +526,8 @@ def train_predict(args = sys.argv):
                                                     arrParams[uid] = []
                                                 arrParams[uid].append( (h5fn, featuresID, exchange, symbol, n_window, interval, _dtime, predict_n_intervals, n_neuron, n_hiddenlay, n_epoch, n_batch_size, dataset_func, sync_dict_json, sync_list_output, seq_pred_len) )
 
+    # now that we have our magical array of jobs/tasks,
+    # let's create a processing pool and execute all jobs accordingly.
 
     tasks = {}
     pools = {}
@@ -544,11 +574,14 @@ def train_predict(args = sys.argv):
 
 if __name__ == '__main__':
     args = sys.argv
+    # we need to know the interval (10 minutes or 60 minutes): {10,60}
     if len(args) < 2:
         print("missing interval param")
         exit()
 
+    # parameters:
     exchanges = ['binance']
+    # crypto currencies: (as defined by the exchange, and accessible through our API)
     symbols = [
         {'base_cur':'BTC', 'quote_cur':'USDT'},
         {'base_cur':'ETH', 'quote_cur':'USDT'},

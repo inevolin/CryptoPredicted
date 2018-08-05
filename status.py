@@ -1,3 +1,16 @@
+
+# status script to identify "offline" or non-responsive behaviour of the producer and consumer.
+# this allows us to identify issues pretty early.
+# this script checks the database for the last notification timestamp (= heartbeat) by the producers/consumer.
+# If a producer/consumer's last heartbeat was too long ago (e.g. more than 3 minutes) then we should report this to the sys admin.
+
+# depending on the sys.argv parameter you can also ask it to show the database records & counts.
+
+# common usage:
+# python status.py liveness 		# print json
+# python status.py liveness mailer 	# print json & notify sys admin (email)
+# python status.py database 		# print json
+
 from datetime import datetime
 import json
 import DAL

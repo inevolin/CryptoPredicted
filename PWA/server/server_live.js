@@ -1,4 +1,6 @@
-// 
+//  live server (live website), the real deal.
+// make sure this is the stable version of the website, otherwise users won't like it :)
+
 process.env.NODE_ENV = 'development';
 
 const root_node = '/';

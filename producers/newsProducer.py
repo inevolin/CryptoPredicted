@@ -1,3 +1,13 @@
+
+# scraping new sites for new articles.
+# notice that this uses multi threading and multi processing to efficiently scrape multiple websites at the same time, while being resourceful (not consuming too much RAM/CPU).
+
+# if you run this script the very first time, it will scrape and analyze all websites and record what it scraped.
+# but it will not send anything to kafka for analysis!!
+# the reason is: it has no idea when an article was posted (it may have been 10 days ago), so no guarantee of the data being real-time.
+# so to solve this, the first time it makes draft of everything it can scrape, and from then on, every new article we can consider as being "real-time".
+# so the second time this script runs (it's a loop), and if it detects a new article/posts, it will send it to kafka for analysis, because now there's 99% guarantee that the new article has actually been published just recently (<1hr precision).
+
 import pprint
 import newspaper
 from newspaper import Article, ArticleException

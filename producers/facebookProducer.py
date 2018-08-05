@@ -1,3 +1,6 @@
+
+# scraping facebook pages/groups for new posts.
+
 import os
 import multiprocessing as mp
 from datetime import datetime, timedelta
