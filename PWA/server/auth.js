@@ -1,4 +1,7 @@
 
+
+// all about the user authentication.
+
 /*
 	db.users.createIndex({"email":1},{unique:true})
 */

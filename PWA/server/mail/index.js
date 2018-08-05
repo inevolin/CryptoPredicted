@@ -1,5 +1,7 @@
 
 
+// SMTP settings and mailing functions used by other modules:
+
 
 module.exports = function(root_node) {
 	var module = {};

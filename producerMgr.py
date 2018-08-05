@@ -1,3 +1,6 @@
+
+# Common functions used by the various producers, primarily sending messages into Kafka.
+
 import json
 from kafka import KafkaProducer
 from kafka import KafkaClient

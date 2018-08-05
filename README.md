@@ -260,8 +260,20 @@ In the consumers/ directory there is an additional directory "tools" which coint
 
 Debugging the consumer is done through a similar approach as the producers.
 
+#### mysettings.py
+This file is very important and is used by most of the python scripts.
+It contains several functions for logging and dates, but more importantly many static variables.
+
+It has a mapping of crypto acronyms to real-life names. For instance, we want to associate BTC with all names people give to Bitcoin, which are: BTC, btc, btc#, bitcoin and #bitcoin. These phrases/words are used on social media, and they specify whether the conent/context is associated with BTC.
+
+This association is a type of standardization and an important component for the entire system.
+
+We also specify the tweets, groups and channels for various producers to scrape from (facebook, reddit, twitter, ...), each mapped by the crypto acronym (e.g. BTC). We also specify a list of news websites/channels for the news producer.
+
+You'll also find some deprecated variables such as "CRYPTO_currencyProducer" and "SITES_forumProducer" which are no longer used, and were part of deleted components.
+
 ### NodeJS
-For several reasons we use Nginx as an additional layer (to use php7). You could also refactor the code to remove Nginx and use NodeJS as sole web server. But for now just play along.
+For several reasons we use Nginx as an additional layer (to optionally support php7 with nodejs). You could also refactor the code to remove Nginx and use NodeJS as sole web server. But for now just play along.
 
 On server A we are going to launch the necessary node workers.
 Navigate to PWA/server/ and run "start.sh".
@@ -279,6 +291,10 @@ Use the command "crontab -e" to open an editor, and at the end of the file add t
 */2 * * * * /home/cryptopredicted/ENV/bin/python3 /home/cryptopredicted/predictors/predictions_v1.py 60
 ```
 As you can see, every two minutes (*/2) two cron jobs will be started of the same file (predictions_v1.py) with different parameters (10 and 60 : referring to minutes). 
+
+This is a dangerous system, because it can make your server crash. Lets say we run these cron jobs every 10 seconds, and given the fact that each one needs 30 seconds to finish, then the system will be overloaded with processes which start but never finish -- thus the server will crash/stall. Solving this is tricky and requires careful engineering. Make sure that each job has enough time to finish executing before a new one is started. Usually one minute per job is enough, with an additional one minute margin just in case (summing up to two minutes per job).
+
+So if you decide to add more input data into the A.I. system, make the models more complex (deeper & more layers), or adding more cryptocurrencies -- keep in mind that this might reduce performance and increase execution time. As a result you may enter dangerous territory, so always have a plan B.
 
 ### Crontab: status.py
 For the system admin there's an extra feature (highly recommended) which will attempt notifying you (in most cases) when a certain module is offline/crashed. 

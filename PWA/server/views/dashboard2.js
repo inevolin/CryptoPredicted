@@ -1,4 +1,8 @@
 
+
+// dashboard front-end logic
+
+
 const moment = require('moment');
 
 module.exports = function(app, auth, root_node, payments, notifiers) {

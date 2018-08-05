@@ -1,3 +1,20 @@
+
+# the kafka consumer, used primarily for sentiment analysis.
+
+# this script reads the kafka stream, produced by our various producers.
+# the stream is read continuously, and each entry is assigned to a time window.
+# the idea is to have 60second (1 minute) windows which to which data is assigned.
+# this allows us to categorize live data by the minute.
+# This is necessary because we want to observe only real-time data, but also store a timestamp when the data was captured (with a minute precision).
+
+# Another benefit of such a system is that we can process data in bulk. Instead of doing an insert/write/update query on the database within the producers (i.e. when new data is scraped), we do it in a batch.
+# This is for performance benefits, batch processing is much faster and consumes less resources than the "basic" way.
+# Depending on the flux of data, you may not see its benefits if there's too little data throughput, but once demand goes up you won't have a bottleneck with the database.
+
+# You'll also notice that the data is categorized as either "social" or "news" type.
+# Each type is processed in a different manner with a different purpose.
+# The reason is simple: news articles are of a different kind than social media chatter.
+
 import sys
 import os
 sys.path.insert(0, '/home/cryptopredicted/')
@@ -124,6 +141,7 @@ class processor_news (threading.Thread):
         self.threads.pop(0)
         
 
+# sentiment analysis (aggregating mentions per crypto and per source (e.g. fb, tw, ...))
 
 def process_rdd_social(time, part_iterator):
     try:
@@ -175,6 +193,8 @@ def process_rdd_news(time, part_iterator):
 
 
 
+# advanced sentiment analysis.
+
 def process_rdd_sentimentAnalysis_social(time, part_iterator):
     try:
 
@@ -210,14 +230,16 @@ def process_rdd_sentimentAnalysis_social(time, part_iterator):
                     buckets[keeper['crypto']] = []
                 buckets[keeper['crypto']].append( keeper )
 
+            # Storing the social mentions in raw format (tweets, mentions, posts,...):
             for key, val in buckets.items():
                 log(key + " keepers: " + str(len(val)))
                 val = sorted(val, key=lambda k: k['social_score'], reverse=True)    
                 val = val[:MAX_MENTIONS_EXTENDED_PER_WINDOW] if len(val) > MAX_MENTIONS_EXTENDED_PER_WINDOW else val
                 log(key + " keepers: " + str(len(val)))
                 log("--")
-            #     DAL.store_mentions_social_extended_bulk(client, val, datetime.fromtimestamp(time));
-                
+                DAL.store_mentions_social_extended_bulk(client, val, datetime.fromtimestamp(time));
+        
+        # storing the results of sentiment analysis:
         if len(crypto_sentiments) > 0:
             for crypto, sentiments in crypto_sentiments.items():
                 if len(sentiments) > 0:
@@ -300,10 +322,12 @@ def process_rdd_sentimentAnalysis_news(time, part_iterator):
             except Exception as ex:
                 log("exception")
                 logErr(str(ex), traceback.format_exc())
-                    
+        
+        # storing raw news articles:
         if len(keepers) > 0:
             DAL.store_mentions_news_extended_bulk(client, keepers, datetime.fromtimestamp(time));
-            
+        
+        # storing results of sentiment analysis:
         if len(crypto_sentiments) > 0:
             for crypto, sentiments in crypto_sentiments.items():
                 if len(sentiments) > 0:

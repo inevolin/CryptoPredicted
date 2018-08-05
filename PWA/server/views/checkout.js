@@ -1,4 +1,5 @@
 
+// payment processing (paypal & stripe)
 
 module.exports = function(app, mailer, payments) {
 

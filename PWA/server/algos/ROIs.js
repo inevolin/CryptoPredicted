@@ -1,4 +1,6 @@
 
+// compute ROI (displayed on the trade signals page)
+// the ROI as of now is for the past 60 days
 
 const MongoClient   = require('mongodb').MongoClient;
 const dbCfg         = require('../db.js');
@@ -13,6 +15,9 @@ MongoClient.connect(dbCfg.url, dbCfg.settings, async (err, database) => {
 	}
 	cryptoDB = database.db('crypto');
 	const core = require('./core.js')(cryptoDB);
+
+
+	// for each new crypto pair (symbol) write a new job scheduler:
 
 	schedule.scheduleJob('0 * * * * *', function() {
 
@@ -135,7 +140,8 @@ MongoClient.connect(dbCfg.url, dbCfg.settings, async (err, database) => {
 async function work(core, cryptoDB, interval, historymins, base_cur, quote_cur, exchange, currentDatetime, algoName) {
 	try {
 		var docs = await core.obtain_price_with_signals(cryptoDB, interval, historymins, base_cur, quote_cur, exchange, currentDatetime, algoName);
-		// compute ROI
+		
+		// assign buy & sell signals into portfolio:
 		var portfolio = {};
 		for (var dt in docs) {
 			var price = docs[dt].close; // if the last entry is a buy, sell using its closing price
@@ -148,9 +154,10 @@ async function work(core, cryptoDB, interval, historymins, base_cur, quote_cur, 
 				}
 			}
 		}
+		// make a deep copy:
 		var portfolio2 = JSON.parse(JSON.stringify(portfolio));
-		//if (algoName == "Demo 1.0")
-		//console.log(portfolio2)
+		
+		// compute ROI of portfolio:
 		var proc =  core.processPortfolio(portfolio, 0.001, 1, 1);
 		console.log(algoName + " " + base_cur + "" + quote_cur + "  " + interval + "\t" + proc.ROI);
 

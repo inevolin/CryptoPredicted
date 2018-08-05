@@ -6,7 +6,7 @@ module.exports = function() {
 
     module.init_telegram_bot_1 = function(params) {
     	const TelegramBot = require('node-telegram-bot-api');
-		const token = '523693659:AAH_JjJxbt1hrtrMYui80bLurfwonhnVRHQ';
+		const token = '523693659:AAH_JjJxbt1hrtrMYui80bLurfwonhnVRHQ'; // bot-specific API token
 		const bot = new TelegramBot(token, params);
 
 		return bot;

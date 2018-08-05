@@ -1,3 +1,7 @@
+
+# This script can be used for misc. operations on the database.
+# It's not actively used, unless you need to do some manual maintenance/operations.
+
 from datetime import datetime
 import pymongo
 import sys
@@ -53,7 +57,7 @@ def remove_all_between(start_incl, end_incl):
 
 start = datetime.strptime('2018-01-05 07:00:00', '%Y-%m-%d %H:%M:%S') # must be local EST
 end = datetime.strptime('2018-01-05 07:59:00', '%Y-%m-%d %H:%M:%S') # must be local EST
-remove_all_between(start,end)
+#remove_all_between(start,end)
 
 
 

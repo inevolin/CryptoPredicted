@@ -1,3 +1,21 @@
+
+# this script connects to your Telegram account and listens for new messages sent to all your chats (groups, private chats, channels, bots, ...).
+# make sure you're not using your Telegram account for sensitive conversations, because it may be recorded by this scirpt.
+# you can however add filters in this script, to only listen to specific groups/channels.
+
+# On the other hand, only one API connection can be established at any time (if I'm not mistaken).
+
+# Finally, if you want to scrape messages regarding crypto currencies, make sure you join public (super) groups and channels on your Telegram app, where people talk about crypto currencies --.
+
+# Telegram sessions.... ###
+# The first time you start this script it will prompt you for your phone number (e.g. +14984984949)
+# once you gave it your phone number, you will receive a Telegram notification on your app with a code,
+# so you will prompted for this code.
+# once you have entered that code this script creates a session file.
+# so the next time it won't prompt you again.
+# this is done only the first time you run it, unless a session file already exists.
+
+
 from pyrogram import Client, MessageHandler
 from pyrogram.api import types
 

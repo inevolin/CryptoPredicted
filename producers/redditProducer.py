@@ -1,4 +1,7 @@
 
+# scraping sub-reddits for new posts and comments.
+
+# REDDIT API credentials:
 # email: cryptopredicted@gmail.com
 # user: crypto_predicted
 # pass: fqe5r89f49esrqg8-*ser5g+serg

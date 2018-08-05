@@ -1,7 +1,10 @@
-// 
+
+//  development server accessible through https://cryptopredicted.com/PWA/
+
+
 process.env.NODE_ENV = 'development';
 
-const root_node = '/PWA/';
+const root_node = '/PWA/'; // you can change this to /DEV or something else
 const port_http = 8000;
 const port_https = 8443;
 

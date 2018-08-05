@@ -1,3 +1,11 @@
+
+# exchange producer: getting data from exchanges (OHLC and Volume)
+# until now only Binance exchange was scraped.
+# if you are going to expand to more exchanges, then instead use a public library like:
+# https://github.com/ccxt/ccxt
+# the  CCXT project has dozens (if not hundreds) of exchange APIs all idone for you (and free).
+# I would also advise you to get rid of Python and use NodeJS workers instead.
+
 import datetime
 import pprint
 import json

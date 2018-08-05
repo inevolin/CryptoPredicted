@@ -1,4 +1,5 @@
 
+// front-end logic with endpoint definitions
 
 const assert = require('assert');
 const minify = require('express-minify'); 

@@ -37,3 +37,10 @@ If you're Sublime fanatic like me, then follow along.
 5. Finally you are ready to run the script, doing so by pressing ctrl+b . Once it's finished (and depending on the script) it may open a chart with the Buy/Sell signals and more.
 ![](https://i.imgur.com/nGSaUl0.png)
 
+## About the algos
+
+You'll notice that each algo script looks very similar to any other (in terms of structure).
+The biggest differences lie within the "buyF()" and "sellF()" functions (refer to algo_prometheus_v2).
+The buyF and sellF functions were introduced to more standardize the format of the algorithms, but not every algo script has been refactored.
+
+Also notice that each algorithm script (at top) starts by selecting a crypto currency (BTC, ETH, LTC, ...), then a date range (dtstart and dtend), but also an interval variable which specifies the OHLC intervals (usually 30 or 60 as minutes).
