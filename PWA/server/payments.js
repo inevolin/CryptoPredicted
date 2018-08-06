@@ -18,8 +18,11 @@ module.exports = function(cryptoDB) {
 // live keys:
    // ... removed due to migration
 
+   	// affiliate users can earn a commission by bringing in clients who use their unique coupon code.
+	// when the coupon email field is "null" then it belongs to no affiliate user. In the other case, use the affiliate user's email address (same as in the user collection) to identify the affiliate. When he/she brings in buyers through the coupon code, this is recorded and users also get a discount defined by pct.
+	// the pct field is the percentage discount  users get (lifetime) when using the code.
 	module.coupon_affiliate_mapping = {
-        "MAY31": {email:null, pct:0.0},
+       // "MAY31": {email:null, pct:0.0},
         
     };
     module.getCouponFromEmail = function (email) {
