@@ -23,4 +23,5 @@ nohup.out
 PWA/server/node_modules/*
 backtest/algos/chart.html
 unknown_errors.txt
+producers/cryptopredicted.session
 
