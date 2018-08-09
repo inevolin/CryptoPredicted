@@ -31,7 +31,8 @@ log = createLogger("facebookProducer_info", "facebookProducer_info")
 
 
 post_arr = []
-graph = GraphAPI("637282779976098|Njeav9jewlL9uH-xTWFeodHNAak")
+#graph = GraphAPI("637282779976098|Njeav9jewlL9uH-xTWFeodHNAak") # vanja's API
+graph = GraphAPI("109177903224114|FTDEjpb8JvBi-D67mrhwnQvZG38") # ilja's API
 appendix = '/feed/?fields=message,link,created_time,name' # we don't need comments/likes/reactions, because these change over time -- we only care when something is posted
 appendix += '&limit=25'
 for page in CRYPTO_facebookPages:
