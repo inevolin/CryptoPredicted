@@ -24,6 +24,10 @@ module.exports = function(app, db) {
 	app.get('/api/extended/news/', (req, res) => {		
 		_api_extended_news_(req, res, db);
 	});
+
+	app.get('/api/status', (req, res) => {		
+		_api_status_(req, res, db);
+	});
 };
 
 
@@ -492,4 +496,26 @@ function _api_extended_news_(req, res, db) {
 	Promise.all(promises).then(() => {
 		res.send(docs);
 	});
+}
+
+
+async function _api_status_(req, res, db) {
+	
+	var cursor =  db.collection('liveness').find({});
+	var docs = [];
+	while(await cursor.hasNext()) {
+		const doc = await cursor.next();
+		if (doc != null) {
+			delete doc._id;
+
+			doc['last_notification_minutes'] = Math.round( (new Date()-doc.timestamp)/1000/60 );
+
+			docs.push(doc);
+		}
+	}
+
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+	res.send(docs);
 }

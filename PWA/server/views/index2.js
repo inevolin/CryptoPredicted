@@ -50,6 +50,7 @@ module.exports = function(app, express, auth, root_node, payments, notifiers, ma
         res.render('pages2/faq.ejs', {  }); 
     });
 
+
     app.get('/404', async (req, res) => {
         res.render('pages2/404.ejs', {  }); 
     });
