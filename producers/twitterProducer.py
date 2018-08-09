@@ -60,10 +60,12 @@ def streamAll():
 
     while True:
         try:
-            access_token = "5855....7-tv........Pz4PZ8jJYRX"
-            access_token_secret = "UiYiMDScAF9Nn.......X3kEpEzEyrBdJ"
-            consumer_key = "qK7Qg43I........712M"
-            consumer_secret = "GKqbr3Bs2y5EMqIT71.........jHlLio4B0hjOfVo"
+            # ilja's API:
+            access_token = "585558557-tvSLz49DTQ8sE92hwtFkAHqZeF6FhPz4PZ8jJYRX"
+            access_token_secret = "UiYiMDScAF9NnFUDa3DGrqZml5UCfJW8X3kEpEzEyrBdJ"
+            consumer_key = "qK7Qg43IB1O44MzVBfLv9712M"
+            consumer_secret = "GKqbr3Bs2y5EMqIT71l7pzkf1bYezVvZJXmjHlLio4B0hjOfVo"
+
             l = StdOutListener()
             auth = OAuthHandler(consumer_key, consumer_secret)
             auth.set_access_token(access_token, access_token_secret)
