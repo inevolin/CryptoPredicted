@@ -50,6 +50,8 @@ The above returns a JSON array with objects that look like this:
 
 The keys are ISO timestamps. Depending on the selected interval (=60 in our case), data is aggregated in windows of 60 minutes, over a range of historymins (=2280 minutes) which equals 2280/60 = 38 objects. The currentDateTime parameter is the starting point date&time, the query searches backwards, thus the range will be like: [..., currentDateTime]
 
+Important: Some components (such as the A.I. system) relies on the structure and order of these results. If you are going to make changes to the API make sure everything remains backward compatible, it's actually better to create a new end-point for your specific needs rather than changing what's working. Unless you are going to change everything then do so with care.
+
 Note: not every object will have all the fields, in case they are missing these fields will not be included. So when writing code that parses these objects make sure to verify and check if the field you're accessing really exists on the object.
 
 ## mail/
