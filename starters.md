@@ -59,3 +59,9 @@ kill -9 $(ps aux | grep facebookProducer)
 
 htop
 ```
+
+# Misc.
+
+View status of different modules (as used by "status.py"):
+https://cryptopredicted.com/PWA/api/status
+
