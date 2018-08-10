@@ -62,11 +62,15 @@ This contains telegram specific bot notifications. So users can receive signal n
 
 ## operations/
 This is a directory for various/misc node workers.
-At tis point it only contains one worker named "ops.js", which is used to notify users whose trial membership has just expired. This again is a scheduled job which runs every minute.
+At this point it only contains one worker named "ops.js", which is used to notify users whose trial membership has just expired. This again is a scheduled job which runs every minute.
 
 ## views/
-We use EJS templating for NodeJS front-end, because of its simplicity and easy of use.
-The views dir contains various front-end templates and code logic.
+We use EJS templating for NodeJS front-end, because of its simplicity and ease of use.
+The views/ dir contains various front-end templates (EJS) and code logic.
+This directory has three child dirs:
+1. pages2/ : this contains EJS templates for the various public pages.
+2. parts2/ : these are re-usable parts (EJS) which are used by the templates.
+3. public2/ : this contains static files (images, css, fonts, javascript, ...) basically anything you want to be accessible statically.
 
 ## websocks/
 Instead of doing ajax calls to get our trade signals and predictions (on the web app), we use web sockets. This makes sense in the case of the predictions, whereby users can leave their browser window open and it will automatically refresh/update the graph. This is possible with ajax as will (in a polling manner), but with websockets we instead "push" data to the users.
