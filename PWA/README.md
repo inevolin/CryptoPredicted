@@ -19,6 +19,8 @@ So whenever you edit some file, which is used in the app (at some level), it wil
 
 Let's say you made some changes, and you verified them as a developed (through the /PWA/ location), how do you persist them into the official website? Just run "pm2 restart all" or "pm2 restart server_live", now the live node will start using the new files/dependencies.
 
+Important: the pure JS node files can be monitored, but static js files which are used in the HTML are not being monitored! Whenever you change static files such as the HTML, CSS, JS, images, ... they will immediately persist and be visible on the live site. This includes the EJS files found in the views/ directory, these EJS templates are loaded from the drive on-demand, thus changing them will also have an immediate impact on the live version. If you want to edit an EJS without having an impact on the final version make a copy and work on the copy, and once you're satisfied replace the live EJS with the copy.
+
 ## algos/
 Algorithms are initially developed in Python on your laptop/desktop (see the /backtest git directory), and once you're satisfied with the results you can re-write the Python logic into NodeJS logic. Doing so easy because the framework is already in place, and you only have to re-write the necessary logic. That's why it's important to use existing scripts as a starting point, making re-writing easier.
 
