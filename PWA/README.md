@@ -48,6 +48,8 @@ You also see that in this case we will data from exchange=binance (the only exch
 The above returns a JSON array with objects that look like this:
 ![](https://i.imgur.com/EXCKm4g.png)
 
+The keys are ISO timestamps. Depending on the selected interval (=60 in our case), data is aggregated in windows of 60 minutes, over a range of historymins (=2280 minutes) which equals 2280/60 = 38 objects. The currentDateTime parameter is the starting point date&time, the query searches backwards, thus the range will be like: [..., currentDateTime]
+
 Note: not every object will have all the fields, in case they are missing these fields will not be included. So when writing code that parses these objects make sure to verify and check if the field you're accessing really exists on the object.
 
 ## mail/
