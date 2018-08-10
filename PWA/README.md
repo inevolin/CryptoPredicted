@@ -19,12 +19,14 @@ So whenever you edit some file, which is used in the app (at some level), it wil
 
 Let's say you made some changes, and you verified them as a developed (through the /PWA/ location), how do you persist them into the official website? Just run "pm2 restart all" or "pm2 restart server_live", now the live node will start using the new files/dependencies.
 
+Important: the pure JS node files can be monitored, but static js files which are used in the HTML are not being monitored! Whenever you change static files such as the HTML, CSS, JS, images, ... they will immediately persist and be visible on the live site. This includes the EJS files found in the views/ directory, these EJS templates are loaded from the drive on-demand, thus changing them will also have an immediate impact on the live version. If you want to edit an EJS without having an impact on the final version make a copy and work on the copy, and once you're satisfied replace the live EJS with the copy.
+
 ## algos/
 Algorithms are initially developed in Python on your laptop/desktop (see the /backtest git directory), and once you're satisfied with the results you can re-write the Python logic into NodeJS logic. Doing so easy because the framework is already in place, and you only have to re-write the necessary logic. That's why it's important to use existing scripts as a starting point, making re-writing easier.
 
 The "algos.js" file is the main node which runs stand-alone, and its task is to periodically execute the variously defined algo strategies to generate buy/sell signals. It does so every 10 seconds using scheduling jobs.
 
-Each inidividual algorithm is very similar as to the Python based algorithms. At the end of every algorithm there are two functions "processSignals" and "processSignals_all". The first one (processSignals) is used to basically monitor only the latest signal (if any), and if there is a new signal generated it will notify the users accordingly. The other one "processSignals_all" is used whenever you have a brand new algorithm which has no signals recorded yet. In this case we can make it generate historical siganls, basically simulating real-life behavior. This is necessary so we can quickly assign an estimated ROI for the new strategy.
+Each inidividual algorithm is very similar as to the Python based algorithms. At the end of every algorithm there are two functions "processSignals" and "processSignals_all". The first one (processSignals) is used to basically monitor only the latest signal (if any), and if there is a new signal generated it will notify the users accordingly. The other one "processSignals_all" is used whenever you have a brand new algorithm which has no signals recorded yet. In this case we can make it generate historical signals, basically simulating real-time behavior. This is necessary so we can quickly assign an estimated ROI for the new strategy.
 Whenever you add a new strategy into "algos.js", make sure to set the "FIRST_RUN" variable to true, to let it generate historical signals, and once it has done that (after 1 minute usually) you should set it back to "false", otherwise it will not notify the users of new signals!
 
 ## api/
@@ -46,6 +48,10 @@ You also see that in this case we will data from exchange=binance (the only exch
 The above returns a JSON array with objects that look like this:
 ![](https://i.imgur.com/EXCKm4g.png)
 
+The keys are ISO timestamps. Depending on the selected interval (=60 in our case), data is aggregated in windows of 60 minutes, over a range of historymins (=2280 minutes) which equals 2280/60 = 38 objects. The currentDateTime parameter is the starting point date&time, the query searches backwards, thus the range will be like: [..., currentDateTime]
+
+Important: Some components (such as the A.I. system) relies on the structure and order of these results. If you are going to make changes to the API make sure everything remains backward compatible, it's actually better to create a new end-point for your specific needs rather than changing what's working. Unless you are going to change everything then do so with care.
+
 Note: not every object will have all the fields, in case they are missing these fields will not be included. So when writing code that parses these objects make sure to verify and check if the field you're accessing really exists on the object.
 
 ## mail/
@@ -56,11 +62,15 @@ This contains telegram specific bot notifications. So users can receive signal n
 
 ## operations/
 This is a directory for various/misc node workers.
-At tis point it only contains one worker named "ops.js", which is used to notify users whose trial membership has just expired. This again is a scheduled job which runs every minute.
+At this point it only contains one worker named "ops.js", which is used to notify users whose trial membership has just expired. This again is a scheduled job which runs every minute.
 
 ## views/
-We use EJS templating for NodeJS front-end, because of its simplicity and easy of use.
-The views dir contains various front-end templates and code logic.
+We use EJS templating for NodeJS front-end, because of its simplicity and ease of use.
+The views/ dir contains various front-end templates (EJS) and code logic.
+This directory has three child dirs:
+1. pages2/ : this contains EJS templates for the various public pages.
+2. parts2/ : these are re-usable parts (EJS) which are used by the templates.
+3. public2/ : this contains static files (images, css, fonts, javascript, ...) basically anything you want to be accessible statically.
 
 ## websocks/
 Instead of doing ajax calls to get our trade signals and predictions (on the web app), we use web sockets. This makes sense in the case of the predictions, whereby users can leave their browser window open and it will automatically refresh/update the graph. This is possible with ajax as will (in a polling manner), but with websockets we instead "push" data to the users.
