@@ -5,7 +5,7 @@ def send_email_server(subject, body):
     import smtplib
 
     FROM = "cryptopredicted@gmail.com"
-    TO =  ["ilja@nevolin.be"] # recipient if type(recipient) is list else [recipient]
+    TO =  ["admin@cryptopredicted.com"] # recipient if type(recipient) is list else [recipient]
     SUBJECT = subject
     TEXT = body
 

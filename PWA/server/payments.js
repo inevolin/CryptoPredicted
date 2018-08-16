@@ -72,6 +72,9 @@ module.exports = function(cryptoDB) {
 			//console.log(user)
         	if (fail) return fail()
         } else {
+        	if (next) return next() // new default: all trial users have unlimited premium access
+
+        	/*
         	var obj = await module.findUserLatestPayment(user.email);
         	if (obj && obj.expiry) {
         		if (new Date() < obj.expiry) {
@@ -86,6 +89,7 @@ module.exports = function(cryptoDB) {
         	
         	console.log("is not premium")
         	if (fail) return fail()
+        	*/
         }
 	}
 	module.findUserLatestPayment = async function(email) {
